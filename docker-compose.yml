@@ -1,0 +1,22 @@
+services:
+  eventflow.api:
+    image: ${DOCKER_REGISTRY-}eventflowapi
+    container_name: EventFlow.api
+    build:
+      context: .
+      dockerfile: src/API/EventFlow.Api/Dockerfile
+    ports:
+      - "5000:8080"
+      - "5001:8081"
+
+  eventflow.database:
+    image: postgres:17
+    container_name: EventFlow.Database
+    environment:
+      POSTGRES_DB: eventflow
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./.containers/postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
