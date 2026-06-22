@@ -31,4 +31,4 @@ jobs:
         run: dotnet test EventFlow.slnx --configuration Release --no-build
 
       - name: Publish
-        run: dotnet publish src/API/EventFlow.API/EventFlow.API.csproj --configuration Release --no-build
+        run: dotnet publish src/API/EventFlow.Api/EventFlow.Api.csproj --configuration Release --no-build
