@@ -9,7 +9,10 @@
   </Folder>
   <Folder Name="/src/Modules/" />
   <Folder Name="/src/Modules/Events/">
-    <Project Path="EventFlow.Modules.Api/EventFlow.Modules.Api.csproj" />
+    <Project Path="src/Modules/Events/EventFlow.Modules.Events.Application/EventFlow.Modules.Events.Application.csproj" Id="100a16f8-1156-492a-a49f-6f1c4b3c16db" />
+    <Project Path="src/Modules/Events/EventFlow.Modules.Events.Domain/EventFlow.Modules.Events.Domain.csproj" Id="fe68220e-351f-4926-bb32-2014c19cc0db" />
+    <Project Path="src/Modules/Events/EventFlow.Modules.Events.Infrastructure/EventFlow.Modules.Events.Infrastructure.csproj" />
+    <Project Path="src/Modules/Events/EventFlow.Modules.Events.Presentation/EventFlow.Modules.Events.Presentation.csproj" Id="27aec46b-297e-49fc-a142-a0b82957b003" />
   </Folder>
   <Project Path="docker-compose.dcproj">
     <Build />

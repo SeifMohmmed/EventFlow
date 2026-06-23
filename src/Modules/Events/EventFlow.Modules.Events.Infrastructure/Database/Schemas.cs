@@ -1,4 +1,4 @@
-﻿namespace EventFlow.Modules.Api.Database;
+﻿namespace EventFlow.Modules.Events.Infrastructure.Database;
 
 internal static class Schemas
 {

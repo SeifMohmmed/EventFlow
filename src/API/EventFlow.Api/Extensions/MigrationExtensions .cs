@@ -1,4 +1,4 @@
-﻿using EventFlow.Modules.Api.Database;
+﻿using EventFlow.Modules.Events.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventFlow.Api.Extensions;
