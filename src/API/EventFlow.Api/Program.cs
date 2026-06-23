@@ -1,25 +1,20 @@
 using EventFlow.Api.Extensions;
-using EventFlow.Modules.Api.Events;
+using EventFlow.Modules.Events.Infrastructure;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddOpenApi();
-
 builder.Services.AddEventModule(builder.Configuration);
+
+builder.Services.AddEndpointsApiExplorer(); // <-- add this
+builder.Services.AddSwaggerGen();
 
 WebApplication app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.UseSwagger();
 
-    // Enables Swagger UI
-    app.UseSwaggerUI(options =>
-    {
-        options.SwaggerEndpoint(
-            "/openapi/v1.json",
-            "EventFlow API v1");
-    });
+    app.UseSwaggerUI();
 
     app.ApplyMigrations();
 }

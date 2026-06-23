@@ -1,6 +1,6 @@
-﻿namespace EventFlow.Modules.Api.Events;
+﻿namespace EventFlow.Modules.Events.Application.Events.GetEvent;
 
-internal sealed record EventResponse(
+public sealed record EventResponse(
     Guid Id,
     string Title,
     string Description,

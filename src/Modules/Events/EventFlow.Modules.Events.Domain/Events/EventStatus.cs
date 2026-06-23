@@ -1,4 +1,4 @@
-﻿namespace EventFlow.Modules.Api.Events;
+﻿namespace EventFlow.Modules.Events.Domain;
 
 public enum EventStatus
 {

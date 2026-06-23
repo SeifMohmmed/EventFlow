@@ -17,11 +17,11 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.23.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="10.2.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="10.2.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\EventFlow.Modules.Api\EventFlow.Modules.Api.csproj" />
+    <ProjectReference Include="..\..\Modules\Events\EventFlow.Modules.Events.Infrastructure\EventFlow.Modules.Events.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
