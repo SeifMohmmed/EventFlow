@@ -5,8 +5,12 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEventModule(builder.Configuration);
 
-builder.Services.AddEndpointsApiExplorer(); // <-- add this
-builder.Services.AddSwaggerGen();
+builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddSwaggerGen(options =>
+{
+    options.CustomSchemaIds(type => type.FullName);
+});
 
 WebApplication app = builder.Build();
 

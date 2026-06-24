@@ -7,7 +7,12 @@ public static class EventEndpoints
 {
     public static void MapEndpoints(this IEndpointRouteBuilder app)
     {
+        CancelEvent.MapEndpoint(app);
+        CreateEvent.MapEndpoint(app);
         GetEvent.MapEndpoint(app);
-        CreateEvents.MapEnpoint(app);
+        GetEvents.MapEndpoint(app);
+        PublishEvent.MapEndpoint(app);
+        RescheduleEvent.MapEndpoint(app);
+        SearchEvents.MapEndpoint(app);
     }
 }

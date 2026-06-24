@@ -1,9 +1,17 @@
-﻿using EventFlow.Modules.Events.Application.Abstractions.Data;
+﻿using EventFlow.Modules.Events.Application.Abstractions.Clock;
+using EventFlow.Modules.Events.Application.Abstractions.Data;
+using EventFlow.Modules.Events.Domain.Categories;
 using EventFlow.Modules.Events.Domain.Events;
+using EventFlow.Modules.Events.Domain.TicketTypes;
+using EventFlow.Modules.Events.Infrastructure.Categories;
+using EventFlow.Modules.Events.Infrastructure.Clock;
 using EventFlow.Modules.Events.Infrastructure.Data;
 using EventFlow.Modules.Events.Infrastructure.Database;
 using EventFlow.Modules.Events.Infrastructure.Events;
+using EventFlow.Modules.Events.Infrastructure.TicketTypes;
+using EventFlow.Modules.Events.Presentation.Categories;
 using EventFlow.Modules.Events.Presentation.Events;
+using EventFlow.Modules.Events.Presentation.TicketTypes;
 using FluentValidation;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +27,8 @@ public static class EventsModule
 {
     public static void MapEndpoints(IEndpointRouteBuilder app)
     {
+        TicketTypeEndpoints.MapEndpoints(app);
+        CategoryEndpoints.MapEndpoints(app);
         EventEndpoints.MapEndpoints(app);
     }
 
@@ -62,11 +72,14 @@ public static class EventsModule
                     .MigrationsHistoryTable(
                         HistoryRepository.DefaultTableName, // "__EFMigrationsHistory"
                         Schemas.Events))                    // Schema: "events"
-                 .UseSnakeCaseNamingConvention());          // EventCategory → event_category
-
-        services.AddScoped<IEventRepository, EventRepository>();
+                 .UseSnakeCaseNamingConvention()     // EventCategory → event_category
+                 .AddInterceptors());
 
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<EventsDbContext>());
 
+        services.AddScoped<IEventRepository, EventRepository>();
+        services.AddScoped<ITicketTypeRepository, TicketTypeRepository>();
+        services.AddScoped<ICategoryRepository, CategoryRepository>();
+        services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
     }
 }
