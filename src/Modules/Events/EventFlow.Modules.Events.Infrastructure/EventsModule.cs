@@ -1,25 +1,19 @@
-﻿using EventFlow.Modules.Events.Application.Abstractions.Clock;
-using EventFlow.Modules.Events.Application.Abstractions.Data;
+﻿using EventFlow.Modules.Events.Application.Abstractions.Data;
 using EventFlow.Modules.Events.Domain.Categories;
 using EventFlow.Modules.Events.Domain.Events;
 using EventFlow.Modules.Events.Domain.TicketTypes;
 using EventFlow.Modules.Events.Infrastructure.Categories;
-using EventFlow.Modules.Events.Infrastructure.Clock;
-using EventFlow.Modules.Events.Infrastructure.Data;
 using EventFlow.Modules.Events.Infrastructure.Database;
 using EventFlow.Modules.Events.Infrastructure.Events;
 using EventFlow.Modules.Events.Infrastructure.TicketTypes;
 using EventFlow.Modules.Events.Presentation.Categories;
 using EventFlow.Modules.Events.Presentation.Events;
 using EventFlow.Modules.Events.Presentation.TicketTypes;
-using FluentValidation;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Npgsql;
 
 namespace EventFlow.Modules.Events.Infrastructure;
 
@@ -37,12 +31,6 @@ public static class EventsModule
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        services.AddMediatR(cfg =>
-        {
-            cfg.RegisterServicesFromAssembly(Application.AssemblyReference.Assembly);
-        });
-
-        services.AddValidatorsFromAssembly(Application.AssemblyReference.Assembly, includeInternalTypes: true);
 
         services.AddInfrastructure(configuration);
 
@@ -55,10 +43,6 @@ public static class EventsModule
     {
         string connectionString = configuration.GetConnectionString("Database")!;
 
-        NpgsqlDataSource npgsqlDataSource = new NpgsqlDataSourceBuilder(connectionString).Build();
-        services.TryAddSingleton(npgsqlDataSource);
-
-        services.AddScoped<IDbConnectionFactory, DbConnectionFactory>();
 
         services.AddDbContext<EventsDbContext>(options =>
             options.UseNpgsql(
@@ -80,6 +64,5 @@ public static class EventsModule
         services.AddScoped<IEventRepository, EventRepository>();
         services.AddScoped<ITicketTypeRepository, TicketTypeRepository>();
         services.AddScoped<ICategoryRepository, CategoryRepository>();
-        services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
     }
 }

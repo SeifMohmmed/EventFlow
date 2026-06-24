@@ -1,6 +1,6 @@
 ﻿using System.Data.Common;
 
-namespace EventFlow.Modules.Events.Application.Abstractions.Data;
+namespace EventFlow.Common.Application.Data;
 
 public interface IDbConnectionFactory
 {

@@ -7,6 +7,11 @@
   <Folder Name="/src/API/">
     <Project Path="src/API/EventFlow.Api/EventFlow.Api.csproj" />
   </Folder>
+  <Folder Name="/src/Common/">
+    <Project Path="src/Common/EventFlow.Common.Application/EventFlow.Common.Application.csproj" Id="174e30d9-e489-491b-a528-4343fdaa761e" />
+    <Project Path="src/Common/EventFlow.Common.Domain/EventFlow.Common.Domain.csproj" Id="eab2d8ec-0253-4872-a33b-a1ee53b16afc" />
+    <Project Path="src/Common/EventFlow.Common.Infrastructure/EventFlow.Common.Infrastructure.csproj" Id="ed4bcd20-36fc-414d-a733-6b85cba112a4" />
+  </Folder>
   <Folder Name="/src/Modules/" />
   <Folder Name="/src/Modules/Events/">
     <Project Path="src/Modules/Events/EventFlow.Modules.Events.Application/EventFlow.Modules.Events.Application.csproj" Id="100a16f8-1156-492a-a49f-6f1c4b3c16db" />

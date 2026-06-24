@@ -1,7 +1,7 @@
-﻿using EventFlow.Modules.Events.Domain.Abstractions;
+﻿using EventFlow.Common.Domain;
 using MediatR;
 
-namespace EventFlow.Modules.Events.Application.Abstractions.Messaging;
+namespace EventFlow.Common.Application.Messaging;
 
 public interface ICommandHandler<in TCommand> : IRequestHandler<TCommand, Result>
     where TCommand : ICommand;

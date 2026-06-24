@@ -1,4 +1,4 @@
-﻿using EventFlow.Modules.Events.Domain.Abstractions;
+﻿using EventFlow.Common.Domain;
 
 namespace EventFlow.Modules.Events.Domain.TicketTypes;
 

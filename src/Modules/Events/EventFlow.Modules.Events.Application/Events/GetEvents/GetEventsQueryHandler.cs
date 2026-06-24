@@ -1,8 +1,8 @@
 ﻿using System.Data.Common;
 using Dapper;
-using EventFlow.Modules.Events.Application.Abstractions.Data;
-using EventFlow.Modules.Events.Application.Abstractions.Messaging;
-using EventFlow.Modules.Events.Domain.Abstractions;
+using EventFlow.Common.Application.Data;
+using EventFlow.Common.Application.Messaging;
+using EventFlow.Common.Domain;
 namespace EventFlow.Modules.Events.Application.Events.GetEvents;
 
 internal sealed class GetEventsQueryHandler(IDbConnectionFactory dbConnectionFactory)

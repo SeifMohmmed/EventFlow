@@ -1,4 +1,4 @@
-﻿using EventFlow.Modules.Events.Domain.Abstractions;
+﻿using EventFlow.Common.Domain;
 using Microsoft.AspNetCore.Http;
 
 namespace EventFlow.Modules.Events.Presentation.ApiResults;

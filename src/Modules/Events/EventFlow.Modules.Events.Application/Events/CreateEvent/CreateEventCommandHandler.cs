@@ -1,8 +1,8 @@
-﻿using EventFlow.Modules.Events.Application.Abstractions.Clock;
+﻿using EventFlow.Common.Application.Clock;
+using EventFlow.Common.Application.Messaging;
+using EventFlow.Common.Domain;
 using EventFlow.Modules.Events.Application.Abstractions.Data;
-using EventFlow.Modules.Events.Application.Abstractions.Messaging;
 using EventFlow.Modules.Events.Domain;
-using EventFlow.Modules.Events.Domain.Abstractions;
 using EventFlow.Modules.Events.Domain.Categories;
 using EventFlow.Modules.Events.Domain.Events;
 

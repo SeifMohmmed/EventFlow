@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace EventFlow.Modules.Events.Domain.Abstractions;
+namespace EventFlow.Common.Domain;
 
 public class Result
 {

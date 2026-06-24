@@ -1,4 +1,4 @@
-﻿using EventFlow.Modules.Events.Domain.Abstractions;
+﻿using EventFlow.Common.Domain;
 using EventFlow.Modules.Events.Domain.Categories;
 using EventFlow.Modules.Events.Domain.Events;
 

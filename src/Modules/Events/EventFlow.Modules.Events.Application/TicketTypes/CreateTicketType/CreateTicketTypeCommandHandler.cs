@@ -1,7 +1,7 @@
-﻿using EventFlow.Modules.Events.Application.Abstractions.Data;
-using EventFlow.Modules.Events.Application.Abstractions.Messaging;
+﻿using EventFlow.Common.Application.Messaging;
+using EventFlow.Common.Domain;
+using EventFlow.Modules.Events.Application.Abstractions.Data;
 using EventFlow.Modules.Events.Domain;
-using EventFlow.Modules.Events.Domain.Abstractions;
 using EventFlow.Modules.Events.Domain.Events;
 using EventFlow.Modules.Events.Domain.TicketTypes;
 
