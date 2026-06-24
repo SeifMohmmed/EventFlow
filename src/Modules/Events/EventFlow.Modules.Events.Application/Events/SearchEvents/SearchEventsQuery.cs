@@ -1,4 +1,4 @@
-﻿using EventFlow.Modules.Events.Application.Abstractions.Messaging;
+﻿using EventFlow.Common.Application.Messaging;
 
 namespace EventFlow.Modules.Events.Application.Events.SearchEvents;
 

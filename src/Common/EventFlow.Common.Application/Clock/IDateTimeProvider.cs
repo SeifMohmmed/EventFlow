@@ -1,4 +1,4 @@
-﻿namespace EventFlow.Modules.Events.Application.Abstractions.Clock;
+﻿namespace EventFlow.Common.Application.Clock;
 
 public interface IDateTimeProvider
 {

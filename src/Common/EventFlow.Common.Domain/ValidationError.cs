@@ -1,4 +1,4 @@
-﻿namespace EventFlow.Modules.Events.Domain.Abstractions;
+﻿namespace EventFlow.Common.Domain;
 
 public sealed record ValidationError : Error
 {

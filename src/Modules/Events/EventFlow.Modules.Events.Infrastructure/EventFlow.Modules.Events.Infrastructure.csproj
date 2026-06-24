@@ -1,11 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<ItemGroup>
-		<PackageReference Include="EFCore.NamingConventions" Version="10.0.1" />
-		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.2" />
-	</ItemGroup>
-	
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Common\EventFlow.Common.Infrastructure\EventFlow.Common.Infrastructure.csproj" />
     <ProjectReference Include="..\EventFlow.Modules.Events.Application\EventFlow.Modules.Events.Application.csproj" />
     <ProjectReference Include="..\EventFlow.Modules.Events.Presentation\EventFlow.Modules.Events.Presentation.csproj" />
   </ItemGroup>

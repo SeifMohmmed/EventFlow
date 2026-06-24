@@ -1,8 +1,8 @@
 ﻿using System.Data.Common;
-using EventFlow.Modules.Events.Application.Abstractions.Data;
+using EventFlow.Common.Application.Data;
 using Npgsql;
 
-namespace EventFlow.Modules.Events.Infrastructure.Data;
+namespace EventFlow.Common.Infrastructure.Data;
 
 internal sealed class DbConnectionFactory(NpgsqlDataSource dataSource) : IDbConnectionFactory
 {
