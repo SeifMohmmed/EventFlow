@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using EventFlow.Common.Application.Behaviors;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -13,6 +14,7 @@ public static class ApplicationConfiguration
         services.AddMediatR(cfg =>
         {
             cfg.RegisterServicesFromAssemblies(moduleAssemblies);
+            cfg.AddOpenBehavior(typeof(RequestLoggingPipelineBehavior<,>));
         });
 
         services.AddValidatorsFromAssemblies(moduleAssemblies, includeInternalTypes: true);
