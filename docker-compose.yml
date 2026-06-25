@@ -20,3 +20,13 @@ services:
       - ./.containers/postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+
+  eventflow.seq:
+    image: datalust/seq:2024.3 # or latest
+    environment:
+      ACCEPT_EULA: "Y"
+    volumes:
+      - ./.containers/seq_data:/data
+    ports:
+      - 8080:80
+      - 5341:5341

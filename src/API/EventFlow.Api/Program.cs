@@ -2,8 +2,14 @@ using EventFlow.Api.Extensions;
 using EventFlow.Common.Application;
 using EventFlow.Common.Infrastructure;
 using EventFlow.Modules.Events.Infrastructure;
+using Serilog;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog((context, configuration) =>
+{
+    configuration.ReadFrom.Configuration(context.Configuration);
+});
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -15,7 +21,7 @@ builder.Services.AddApplication([EventFlow.Modules.Events.Application.AssemblyRe
 
 builder.Services.AddInfrastructure(builder.Configuration.GetConnectionString("Database")!);
 
-builder.Configuration.AddModuleConfiguration(["events", "..."]);
+builder.Configuration.AddModuleConfiguration(["events"]);
 
 builder.Services.AddEventModule(builder.Configuration);
 
@@ -30,5 +36,7 @@ if (app.Environment.IsDevelopment())
 }
 
 EventsModule.MapEndpoints(app);
+
+app.UseSerilogRequestLogging();
 
 await app.RunAsync();
