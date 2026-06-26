@@ -1,4 +1,5 @@
-﻿using EventFlow.Modules.Events.Application.Abstractions.Data;
+﻿using EventFlow.Common.Presentation.Endpoints;
+using EventFlow.Modules.Events.Application.Abstractions.Data;
 using EventFlow.Modules.Events.Domain.Categories;
 using EventFlow.Modules.Events.Domain.Events;
 using EventFlow.Modules.Events.Domain.TicketTypes;
@@ -6,10 +7,6 @@ using EventFlow.Modules.Events.Infrastructure.Categories;
 using EventFlow.Modules.Events.Infrastructure.Database;
 using EventFlow.Modules.Events.Infrastructure.Events;
 using EventFlow.Modules.Events.Infrastructure.TicketTypes;
-using EventFlow.Modules.Events.Presentation.Categories;
-using EventFlow.Modules.Events.Presentation.Events;
-using EventFlow.Modules.Events.Presentation.TicketTypes;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
@@ -23,22 +20,13 @@ namespace EventFlow.Modules.Events.Infrastructure;
 public static class EventsModule
 {
     /// <summary>
-    /// Maps all endpoints exposed by the Events module.
-    /// </summary>
-    public static void MapEndpoints(IEndpointRouteBuilder app)
-    {
-        TicketTypeEndpoints.MapEndpoints(app);
-        CategoryEndpoints.MapEndpoints(app);
-        EventEndpoints.MapEndpoints(app);
-    }
-
-    /// <summary>
     /// Registers the Events module services.
     /// </summary>
     public static IServiceCollection AddEventModule(
         this IServiceCollection services,
         IConfiguration configuration)
     {
+        services.AddEndpoints(Presentation.AssemblyReference.Assembly);
         services.AddInfrastructure(configuration);
 
         return services;

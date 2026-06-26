@@ -1,7 +1,7 @@
 ﻿using EventFlow.Common.Domain;
 using Microsoft.AspNetCore.Http;
 
-namespace EventFlow.Modules.Events.Presentation.ApiResults;
+namespace EventFlow.Common.Presentation.ApiResults;
 
 /// <summary>
 /// Provides helper methods for converting

@@ -1,6 +1,6 @@
 ﻿using EventFlow.Common.Domain;
 
-namespace EventFlow.Modules.Events.Presentation.ApiResults;
+namespace EventFlow.Common.Presentation.ApiResults;
 
 /// <summary>
 /// Provides helper methods for mapping application

@@ -1,6 +1,7 @@
 ﻿using EventFlow.Common.Domain;
+using EventFlow.Common.Presentation.ApiResults;
+using EventFlow.Common.Presentation.Endpoints;
 using EventFlow.Modules.Events.Application.Events.CreateEvent;
-using EventFlow.Modules.Events.Presentation.ApiResults;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -8,9 +9,9 @@ using Microsoft.AspNetCore.Routing;
 
 namespace EventFlow.Modules.Events.Presentation;
 
-internal static class CreateEvent
+internal sealed class CreateEvent : IEndpoint
 {
-    public static void MapEndpoint(IEndpointRouteBuilder app)
+    public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPost("events", async (Request request, ISender sender) =>
         {
