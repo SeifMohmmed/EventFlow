@@ -3,16 +3,26 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EventFlow.Api.Middleware;
 
-internal sealed class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger)
+/// <summary>
+/// Handles unhandled exceptions and returns a standardized
+/// Problem Details response.
+/// </summary>
+internal sealed class GlobalExceptionHandler(
+    ILogger<GlobalExceptionHandler> logger)
     : IExceptionHandler
 {
+    /// <summary>
+    /// Attempts to handle an unhandled exception.
+    /// </summary>
     public async ValueTask<bool> TryHandleAsync(
         HttpContext httpContext,
         Exception exception,
         CancellationToken cancellationToken)
     {
+        // Log the unhandled exception.
         logger.LogError(exception, "Unhandled exception occurred");
 
+        // Create a generic RFC 7807 Problem Details response.
         var problemDetails = new ProblemDetails
         {
             Status = StatusCodes.Status500InternalServerError,
@@ -22,8 +32,11 @@ internal sealed class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> log
 
         httpContext.Response.StatusCode = problemDetails.Status.Value;
 
-        await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken);
+        await httpContext.Response.WriteAsJsonAsync(
+            problemDetails,
+            cancellationToken);
 
+        // Indicate that the exception has been handled.
         return true;
     }
 }
