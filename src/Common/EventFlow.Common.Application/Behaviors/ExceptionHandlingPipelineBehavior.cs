@@ -4,6 +4,12 @@ using Microsoft.Extensions.Logging;
 
 namespace EventFlow.Common.Application.Behaviors;
 
+/// <summary>
+/// MediatR pipeline behavior that catches unhandled exceptions,
+/// logs them, and wraps them in an application-specific exception.
+/// </summary>
+/// <typeparam name="TRequest">The request being processed.</typeparam>
+/// <typeparam name="TResponse">The response returned by the handler.</typeparam>
 internal sealed class ExceptionHandlingPipelineBehavior<TRequest, TResponse>(
     ILogger<ExceptionHandlingPipelineBehavior<TRequest, TResponse>> logger)
     : IPipelineBehavior<TRequest, TResponse>
@@ -16,13 +22,23 @@ internal sealed class ExceptionHandlingPipelineBehavior<TRequest, TResponse>(
     {
         try
         {
+            // Execute the next behavior or the request handler.
             return await next(cancellationToken);
         }
         catch (Exception exception)
         {
-            logger.LogError(exception, "Unhandled exception for {RequestName}", typeof(TRequest).Name);
+            // Log the unhandled exception with the request name
+            // to simplify troubleshooting.
+            logger.LogError(
+                exception,
+                "Unhandled exception for {RequestName}",
+                typeof(TRequest).Name);
 
-            throw new EventFlowException(typeof(TRequest).Name, innerException: exception);
+            // Wrap the original exception in a custom application exception
+            // to provide a consistent exception type throughout the application.
+            throw new EventFlowException(
+                typeof(TRequest).Name,
+                innerException: exception);
         }
     }
 }
