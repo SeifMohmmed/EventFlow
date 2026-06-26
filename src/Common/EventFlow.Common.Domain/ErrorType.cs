@@ -1,5 +1,8 @@
 ﻿namespace EventFlow.Common.Domain;
 
+/// <summary>
+/// Represents the category of an application error.
+/// </summary>
 public enum ErrorType
 {
     Failure = 0,

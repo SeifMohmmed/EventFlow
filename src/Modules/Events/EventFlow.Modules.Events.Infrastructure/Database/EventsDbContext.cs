@@ -8,13 +8,21 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EventFlow.Modules.Events.Infrastructure.Database;
 
-public sealed class EventsDbContext(DbContextOptions<EventsDbContext> options) : DbContext(options), IUnitOfWork
+/// <summary>
+/// Entity Framework Core database context for the Events module.
+/// </summary>
+public sealed class EventsDbContext(
+    DbContextOptions<EventsDbContext> options)
+    : DbContext(options), IUnitOfWork
 {
     internal DbSet<Event> Events { get; set; }
     internal DbSet<Category> Categories { get; set; }
 
     internal DbSet<TicketType> TicketTypes { get; set; }
 
+    /// <summary>
+    /// Configures the Events module database schema and entity mappings.
+    /// </summary>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema(Schemas.Events);
