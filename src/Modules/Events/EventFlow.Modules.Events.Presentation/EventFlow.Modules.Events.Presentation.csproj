@@ -1,9 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-	<ItemGroup>
-		<FrameworkReference Include="Microsoft.AspNetCore.App" />
-	</ItemGroup>
-	
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Common\EventFlow.Common.Presentation\EventFlow.Common.Presentation.csproj" />
     <ProjectReference Include="..\EventFlow.Modules.Events.Application\EventFlow.Modules.Events.Application.csproj" />
   </ItemGroup>
 

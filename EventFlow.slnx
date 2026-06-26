@@ -11,6 +11,7 @@
     <Project Path="src/Common/EventFlow.Common.Application/EventFlow.Common.Application.csproj" Id="174e30d9-e489-491b-a528-4343fdaa761e" />
     <Project Path="src/Common/EventFlow.Common.Domain/EventFlow.Common.Domain.csproj" Id="eab2d8ec-0253-4872-a33b-a1ee53b16afc" />
     <Project Path="src/Common/EventFlow.Common.Infrastructure/EventFlow.Common.Infrastructure.csproj" Id="ed4bcd20-36fc-414d-a733-6b85cba112a4" />
+    <Project Path="src/Common/EventFlow.Common.Presentation/EventFlow.Common.Presentation.csproj" Id="8386b101-db8e-40d9-b622-2b31ee250ce9" />
   </Folder>
   <Folder Name="/src/Modules/" />
   <Folder Name="/src/Modules/Events/">

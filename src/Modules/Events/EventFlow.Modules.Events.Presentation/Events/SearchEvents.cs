@@ -1,6 +1,7 @@
 ﻿using EventFlow.Common.Domain;
+using EventFlow.Common.Presentation.ApiResults;
+using EventFlow.Common.Presentation.Endpoints;
 using EventFlow.Modules.Events.Application.Events.SearchEvents;
-using EventFlow.Modules.Events.Presentation.ApiResults;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -8,9 +9,9 @@ using Microsoft.AspNetCore.Routing;
 
 namespace EventFlow.Modules.Events.Presentation.Events;
 
-internal static class SearchEvents
+internal sealed class SearchEvents : IEndpoint
 {
-    public static void MapEndpoint(IEndpointRouteBuilder app)
+    public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet("events/search", async (
             ISender sender,
