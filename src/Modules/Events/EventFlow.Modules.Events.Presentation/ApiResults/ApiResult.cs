@@ -3,10 +3,19 @@ using Microsoft.AspNetCore.Http;
 
 namespace EventFlow.Modules.Events.Presentation.ApiResults;
 
+/// <summary>
+/// Provides helper methods for converting
+/// application results into HTTP responses.
+/// </summary>
 public static class ApiResult
 {
+    /// <summary>
+    /// Converts a failed application result into an RFC 7807
+    /// Problem Details response.
+    /// </summary>
     public static IResult Problem(Result result)
     {
+        // This method should only be called for failed results.
         if (result.IsSuccess)
         {
             throw new InvalidOperationException();
@@ -19,6 +28,7 @@ public static class ApiResult
             statusCode: GetStatusCode(result.Error.Type),
             extensions: GetErrors(result));
 
+        // Returns the problem title.
         static string GetTitle(Error error) =>
             error.Type switch
             {
@@ -29,6 +39,7 @@ public static class ApiResult
                 _ => "Server failure"
             };
 
+        // Returns the problem description.
         static string GetDetail(Error error) =>
             error.Type switch
             {
@@ -39,6 +50,7 @@ public static class ApiResult
                 _ => "An unexpected error occurred"
             };
 
+        // Maps the error type to its RFC 7231 documentation.
         static string GetType(ErrorType errorType) =>
             errorType switch
             {
@@ -49,6 +61,7 @@ public static class ApiResult
                 _ => "https://tools.ietf.org/html/rfc7231#section-6.6.1"
             };
 
+        // Maps the error type to the appropriate HTTP status code.
         static int GetStatusCode(ErrorType errorType) =>
             errorType switch
             {
@@ -59,6 +72,7 @@ public static class ApiResult
                 _ => StatusCodes.Status500InternalServerError
             };
 
+        // Adds validation errors to the Problem Details response.
         static Dictionary<string, object?>? GetErrors(Result result)
         {
             if (result.Error is not ValidationError validationError)

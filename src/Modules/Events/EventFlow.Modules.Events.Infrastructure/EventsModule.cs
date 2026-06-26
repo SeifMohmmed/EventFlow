@@ -17,8 +17,14 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace EventFlow.Modules.Events.Infrastructure;
 
+/// <summary>
+/// Configures the Events module services and endpoints.
+/// </summary>
 public static class EventsModule
 {
+    /// <summary>
+    /// Maps all endpoints exposed by the Events module.
+    /// </summary>
     public static void MapEndpoints(IEndpointRouteBuilder app)
     {
         TicketTypeEndpoints.MapEndpoints(app);
@@ -26,41 +32,51 @@ public static class EventsModule
         EventEndpoints.MapEndpoints(app);
     }
 
-
+    /// <summary>
+    /// Registers the Events module services.
+    /// </summary>
     public static IServiceCollection AddEventModule(
         this IServiceCollection services,
         IConfiguration configuration)
     {
-
         services.AddInfrastructure(configuration);
 
         return services;
     }
 
+    /// <summary>
+    /// Registers the infrastructure services for the Events module.
+    /// </summary>
     private static void AddInfrastructure(
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        string connectionString = configuration.GetConnectionString("Database")!;
+        string connectionString =
+            configuration.GetConnectionString("Database")!;
 
-
+        // Register the Events module DbContext.
         services.AddDbContext<EventsDbContext>(options =>
             options.UseNpgsql(
                 connectionString,
                 npgsqlOptions => npgsqlOptions
 
-                    // Configure EF Core migration history table location.
-                    // By default EF creates: public.__EFMigrationsHistory
-                    // Here we move it into the "events" schema so this module
-                    // keeps its migrations isolated from other modules.
+                    // Store EF Core migration history inside the
+                    // Events schema instead of the default "public" schema.
                     .MigrationsHistoryTable(
-                        HistoryRepository.DefaultTableName, // "__EFMigrationsHistory"
-                        Schemas.Events))                    // Schema: "events"
-                 .UseSnakeCaseNamingConvention()     // EventCategory → event_category
-                 .AddInterceptors());
+                        HistoryRepository.DefaultTableName,
+                        Schemas.Events))
 
-        services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<EventsDbContext>());
+                // Convert table and column names to snake_case.
+                .UseSnakeCaseNamingConvention()
 
+                // Register EF Core interceptors.
+                .AddInterceptors());
+
+        // Register the Unit of Work implementation.
+        services.AddScoped<IUnitOfWork>(
+            sp => sp.GetRequiredService<EventsDbContext>());
+
+        // Register repositories.
         services.AddScoped<IEventRepository, EventRepository>();
         services.AddScoped<ITicketTypeRepository, TicketTypeRepository>();
         services.AddScoped<ICategoryRepository, CategoryRepository>();
