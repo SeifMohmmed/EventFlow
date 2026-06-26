@@ -1,4 +1,5 @@
-﻿using EventFlow.Common.Domain;
+﻿using EventFlow.Common.Application.Caching;
+using EventFlow.Common.Domain;
 using EventFlow.Modules.Events.Application.Categories.GetCategories;
 using EventFlow.Modules.Events.Application.Categories.GetCategory;
 using EventFlow.Modules.Events.Presentation.ApiResults;
@@ -13,9 +14,27 @@ internal static class GetCategories
 {
     public static void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("categories", async (ISender sender) =>
+        app.MapGet("categories", async (ISender sender, ICacheService cacheService) =>
         {
-            Result<IReadOnlyCollection<CategoryResponse>> result = await sender.Send(new GetCategoriesQuery());
+            // Try to retrieve the categories from the cache.
+            IReadOnlyCollection<CategoryResponse> categoryResponses =
+                await cacheService.GetAsync<IReadOnlyCollection<CategoryResponse>>("categories");
+
+            // Return the cached response if available.
+            if (categoryResponses is not null)
+            {
+                return Results.Ok(categoryResponses);
+            }
+
+            // Fetch the categories from the application layer.
+            Result<IReadOnlyCollection<CategoryResponse>> result =
+                await sender.Send(new GetCategoriesQuery());
+
+            // Cache the successful result for future requests.
+            if (result.IsSuccess)
+            {
+                await cacheService.SetAsync("categories", result.Value);
+            }
 
             return result.Match(Results.Ok, ApiResult.Problem);
         })
