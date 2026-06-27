@@ -1,9 +1,11 @@
-﻿namespace EventFlow.Common.Domain;
+﻿using MediatR;
+
+namespace EventFlow.Common.Domain;
 
 /// <summary>
 /// Represents a domain event.
 /// </summary>
-public interface IDomainEvent
+public interface IDomainEvent : INotification
 {
     /// <summary>
     /// Gets the event identifier.

@@ -4,6 +4,7 @@ using EventFlow.Common.Application.Data;
 using EventFlow.Common.Infrastructure.Caching;
 using EventFlow.Common.Infrastructure.Clock;
 using EventFlow.Common.Infrastructure.Data;
+using EventFlow.Common.Infrastructure.Interceptors;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Npgsql;
@@ -37,6 +38,8 @@ public static class InfrastructureConfiguration
 
         // Register the application's date/time provider.
         services.TryAddSingleton<IDateTimeProvider, DateTimeProvider>();
+
+        services.TryAddSingleton<PublishDomainEventsInterceptor>();
 
         // Create and register the Redis connection multiplexer.
         IConnectionMultiplexer connectionMultiplexer =
