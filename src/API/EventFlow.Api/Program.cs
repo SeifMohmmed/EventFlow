@@ -4,6 +4,7 @@ using EventFlow.Common.Application;
 using EventFlow.Common.Infrastructure;
 using EventFlow.Common.Presentation.Endpoints;
 using EventFlow.Modules.Events.Infrastructure;
+using EventFlow.Modules.Ticketing.Infrastructure;
 using EventFlow.Modules.Users.Infrastructure;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -27,7 +28,8 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.AddApplication([
     EventFlow.Modules.Events.Application.AssemblyReference.Assembly,
-    EventFlow.Modules.Users.Application.AssemblyReference.Assembly]);
+    EventFlow.Modules.Users.Application.AssemblyReference.Assembly,
+    EventFlow.Modules.Ticketing.Application.AssemblyReference.Assembly]);
 
 string databaseConnectionString = builder.Configuration.GetConnectionString("Database")!;
 string redisConnectionString = builder.Configuration.GetConnectionString("Cache")!;
@@ -36,7 +38,7 @@ builder.Services.AddInfrastructure(
     databaseConnectionString,
     redisConnectionString);
 
-builder.Configuration.AddModuleConfiguration(["events", "users"]);
+builder.Configuration.AddModuleConfiguration(["events", "users", "ticketing"]);
 
 builder.Services.AddHealthChecks()
     .AddNpgSql(databaseConnectionString)
@@ -44,6 +46,7 @@ builder.Services.AddHealthChecks()
 
 builder.Services.AddEventModule(builder.Configuration);
 builder.Services.AddUsersModule(builder.Configuration);
+builder.Services.AddTicketingModule(builder.Configuration);
 
 WebApplication app = builder.Build();
 
