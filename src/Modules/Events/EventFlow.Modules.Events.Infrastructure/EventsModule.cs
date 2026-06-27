@@ -1,4 +1,5 @@
-﻿using EventFlow.Common.Presentation.Endpoints;
+﻿using EventFlow.Common.Infrastructure.Interceptors;
+using EventFlow.Common.Presentation.Endpoints;
 using EventFlow.Modules.Events.Application.Abstractions.Data;
 using EventFlow.Modules.Events.Domain.Categories;
 using EventFlow.Modules.Events.Domain.Events;
@@ -43,22 +44,21 @@ public static class EventsModule
             configuration.GetConnectionString("Database")!;
 
         // Register the Events module DbContext.
-        services.AddDbContext<EventsDbContext>(options =>
-            options.UseNpgsql(
-                connectionString,
-                npgsqlOptions => npgsqlOptions
-
-                    // Store EF Core migration history inside the
-                    // Events schema instead of the default "public" schema.
-                    .MigrationsHistoryTable(
-                        HistoryRepository.DefaultTableName,
-                        Schemas.Events))
-
+        services.AddDbContext<EventsDbContext>((sp, options) =>
+            options
+                // Configure PostgreSQL and store migration history
+                // in the Events schema.
+                .UseNpgsql(
+                    connectionString,
+                    npgsqlOptions => npgsqlOptions
+                        .MigrationsHistoryTable(
+                            HistoryRepository.DefaultTableName,
+                            Schemas.Events))
                 // Convert table and column names to snake_case.
                 .UseSnakeCaseNamingConvention()
-
-                // Register EF Core interceptors.
-                .AddInterceptors());
+                // Publish domain events after a successful SaveChanges call.
+                .AddInterceptors(
+                    sp.GetRequiredService<PublishDomainEventsInterceptor>()));
 
         // Register the Unit of Work implementation.
         services.AddScoped<IUnitOfWork>(
