@@ -20,6 +20,12 @@
     <Project Path="src/Modules/Events/EventFlow.Modules.Events.Infrastructure/EventFlow.Modules.Events.Infrastructure.csproj" />
     <Project Path="src/Modules/Events/EventFlow.Modules.Events.Presentation/EventFlow.Modules.Events.Presentation.csproj" Id="27aec46b-297e-49fc-a142-a0b82957b003" />
   </Folder>
+  <Folder Name="/src/Modules/Users/">
+    <Project Path="src/Modules/Users/EventFlow.Modules.Users.Application/EventFlow.Modules.Users.Application.csproj" Id="afdb3d36-37e5-4f05-ab52-774341a94753" />
+    <Project Path="src/Modules/Users/EventFlow.Modules.Users.Domain/EventFlow.Modules.Users.Domain.csproj" Id="6fafa3a8-dba0-4f62-9252-30db2c0da8ce" />
+    <Project Path="src/Modules/Users/EventFlow.Modules.Users.Infrastructure/EventFlow.Modules.Users.Infrastructure.csproj" Id="551f51dc-f225-401b-b985-5d0c4e6cc419" />
+    <Project Path="src/Modules/Users/EventFlow.Modules.Users.Presentation/EventFlow.Modules.Users.Presentation.csproj" Id="49581e18-7e9c-4f84-a1bb-3c8c02a8ca8e" />
+  </Folder>
   <Project Path="docker-compose.dcproj">
     <Build />
   </Project>

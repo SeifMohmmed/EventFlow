@@ -41,18 +41,33 @@ public static class InfrastructureConfiguration
 
         services.TryAddSingleton<PublishDomainEventsInterceptor>();
 
-        // Create and register the Redis connection multiplexer.
-        IConnectionMultiplexer connectionMultiplexer =
-            ConnectionMultiplexer.Connect(redisConnectionString);
-
-        services.TryAddSingleton(connectionMultiplexer);
-
-        // Configure the distributed cache to use Redis.
-        services.AddStackExchangeRedisCache(options =>
+        try
         {
-            options.ConnectionMultiplexerFactory =
-                () => Task.FromResult(connectionMultiplexer);
-        });
+            // During EF Core design-time operations (e.g. Add-Migration),
+            // the application's Program.cs is executed to build the service provider.
+            // If Redis is unavailable, creating the connection would throw an exception
+            // and prevent migrations from being generated.
+
+            // Create and register the Redis connection multiplexer.
+            IConnectionMultiplexer connectionMultiplexer =
+                ConnectionMultiplexer.Connect(redisConnectionString);
+
+            services.TryAddSingleton(connectionMultiplexer);
+
+            // Configure the distributed cache to use Redis.
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.ConnectionMultiplexerFactory =
+                    () => Task.FromResult(connectionMultiplexer);
+            });
+        }
+        catch
+        {
+            // Fall back to an in-memory distributed cache when Redis is unavailable.
+            // This allows the application (especially EF Core migrations) to start
+            // without requiring a running Redis instance.
+            services.AddDistributedMemoryCache();
+        }
 
         // Register the application's cache service.
         services.TryAddSingleton<ICacheService, CacheService>();
