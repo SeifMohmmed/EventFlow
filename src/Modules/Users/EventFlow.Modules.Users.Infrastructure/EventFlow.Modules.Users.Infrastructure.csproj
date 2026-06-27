@@ -1,0 +1,8 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Common\EventFlow.Common.Infrastructure\EventFlow.Common.Infrastructure.csproj" />
+    <ProjectReference Include="..\EventFlow.Modules.Users.Application\EventFlow.Modules.Users.Application.csproj" />
+    <ProjectReference Include="..\EventFlow.Modules.Users.Presentation\EventFlow.Modules.Users.Presentation.csproj" />
+  </ItemGroup>
+
+</Project>

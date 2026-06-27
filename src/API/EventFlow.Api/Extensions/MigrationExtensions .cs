@@ -1,4 +1,5 @@
 ﻿using EventFlow.Modules.Events.Infrastructure.Database;
+using EventFlow.Modules.Users.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventFlow.Api.Extensions;
@@ -17,6 +18,7 @@ internal static class MigrationExtensions
         using IServiceScope scope = app.ApplicationServices.CreateScope();
 
         ApplyMigration<EventsDbContext>(scope);
+        ApplyMigration<UsersDbContext>(scope);
     }
 
     /// <summary>
