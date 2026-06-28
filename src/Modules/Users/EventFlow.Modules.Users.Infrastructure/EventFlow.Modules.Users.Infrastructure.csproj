@@ -3,6 +3,7 @@
     <ProjectReference Include="..\..\..\Common\EventFlow.Common.Infrastructure\EventFlow.Common.Infrastructure.csproj" />
     <ProjectReference Include="..\EventFlow.Modules.Users.Application\EventFlow.Modules.Users.Application.csproj" />
     <ProjectReference Include="..\EventFlow.Modules.Users.Presentation\EventFlow.Modules.Users.Presentation.csproj" />
+    <ProjectReference Include="..\EventFlow.Modules.Users.PublicApi\EventFlow.Modules.Users.PublicApi.csproj" />
   </ItemGroup>
 
 </Project>

@@ -19,6 +19,7 @@
     <Project Path="src/Modules/Events/EventFlow.Modules.Events.Domain/EventFlow.Modules.Events.Domain.csproj" Id="fe68220e-351f-4926-bb32-2014c19cc0db" />
     <Project Path="src/Modules/Events/EventFlow.Modules.Events.Infrastructure/EventFlow.Modules.Events.Infrastructure.csproj" />
     <Project Path="src/Modules/Events/EventFlow.Modules.Events.Presentation/EventFlow.Modules.Events.Presentation.csproj" Id="27aec46b-297e-49fc-a142-a0b82957b003" />
+    <Project Path="src/Modules/Events/EventFlow.Modules.Events.PublicApi/EventFlow.Modules.Events.PublicApi.csproj" Id="48fdc356-f926-4f77-87b7-ba464b218344" />
   </Folder>
   <Folder Name="/src/Modules/Ticketing/">
     <Project Path="src/Modules/Ticketing/EventFlow.Modules.Ticketing.Application/EventFlow.Modules.Ticketing.Application.csproj" Id="1942fcf3-52e9-4ee4-8cdc-281555a8659e" />
@@ -31,6 +32,7 @@
     <Project Path="src/Modules/Users/EventFlow.Modules.Users.Domain/EventFlow.Modules.Users.Domain.csproj" Id="6fafa3a8-dba0-4f62-9252-30db2c0da8ce" />
     <Project Path="src/Modules/Users/EventFlow.Modules.Users.Infrastructure/EventFlow.Modules.Users.Infrastructure.csproj" Id="551f51dc-f225-401b-b985-5d0c4e6cc419" />
     <Project Path="src/Modules/Users/EventFlow.Modules.Users.Presentation/EventFlow.Modules.Users.Presentation.csproj" Id="49581e18-7e9c-4f84-a1bb-3c8c02a8ca8e" />
+    <Project Path="src/Modules/Users/EventFlow.Modules.Users.PublicApi/EventFlow.Modules.Users.PublicApi.csproj" Id="7d59a545-f45c-4e34-8280-2c5a8d2483b1" />
   </Folder>
   <Project Path="docker-compose.dcproj">
     <Build />
