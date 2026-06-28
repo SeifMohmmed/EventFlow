@@ -1,4 +1,5 @@
-﻿using static System.Runtime.InteropServices.JavaScript.JSType;
+﻿
+using EventFlow.Common.Domain;
 
 namespace EventFlow.Common.Application.Exceptions;
 

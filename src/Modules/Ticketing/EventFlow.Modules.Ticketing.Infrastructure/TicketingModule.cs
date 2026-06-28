@@ -1,9 +1,16 @@
-﻿using EventFlow.Common.Presentation.Endpoints;
+﻿using EventFlow.Common.Infrastructure.Interceptors;
+using EventFlow.Common.Presentation.Endpoints;
+using EventFlow.Modules.Ticketing.Application.Abstractions.Data;
 using EventFlow.Modules.Ticketing.Application.Carts;
+using EventFlow.Modules.Ticketing.Domain.Customers;
+using EventFlow.Modules.Ticketing.Infrastructure.Customers;
+using EventFlow.Modules.Ticketing.Infrastructure.Database;
+using EventFlow.Modules.Ticketing.Infrastructure.PublicApi;
+using EventFlow.Modules.Ticketing.PublicApi;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-
 namespace EventFlow.Modules.Ticketing.Infrastructure;
 
 public static class TicketingModule
@@ -26,12 +33,25 @@ public static class TicketingModule
     /// <summary>
     /// Registers the infrastructure services for the Ticketing module.
     /// </summary>
-#pragma warning disable S1172 // Unused method parameters should be removed
-#pragma warning disable IDE0060 // Unused method parameters should be removed
     private static void AddInfrastructure(
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        services.TryAddSingleton<CartService>();
+        services.AddDbContext<TicketingDbContext>((sp, options) =>
+            options
+                .UseNpgsql(
+                    configuration.GetConnectionString("Database"),
+                    npgsqlOptions => npgsqlOptions
+                        .MigrationsHistoryTable(HistoryRepository.DefaultTableName, Schemas.Ticketing))
+                .AddInterceptors(sp.GetRequiredService<PublishDomainEventsInterceptor>())
+                .UseSnakeCaseNamingConvention());
+
+        services.AddScoped<ICustomerRepository, CustomerRepository>();
+
+        services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<TicketingDbContext>());
+
+        services.AddSingleton<CartService>();
+
+        services.AddScoped<ITicketingApi, TicketingApi>();
     }
 }
