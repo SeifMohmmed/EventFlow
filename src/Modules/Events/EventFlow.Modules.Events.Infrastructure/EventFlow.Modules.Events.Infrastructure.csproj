@@ -2,8 +2,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Common\EventFlow.Common.Infrastructure\EventFlow.Common.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Ticketing\EventFlow.Modules.Ticketing.PublicApi\EventFlow.Modules.Ticketing.PublicApi.csproj" />
     <ProjectReference Include="..\EventFlow.Modules.Events.Application\EventFlow.Modules.Events.Application.csproj" />
     <ProjectReference Include="..\EventFlow.Modules.Events.Presentation\EventFlow.Modules.Events.Presentation.csproj" />
+    <ProjectReference Include="..\EventFlow.Modules.Events.PublicApi\EventFlow.Modules.Events.PublicApi.csproj" />
   </ItemGroup>
 
 </Project>

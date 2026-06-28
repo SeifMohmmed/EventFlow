@@ -7,7 +7,9 @@ using EventFlow.Modules.Events.Domain.TicketTypes;
 using EventFlow.Modules.Events.Infrastructure.Categories;
 using EventFlow.Modules.Events.Infrastructure.Database;
 using EventFlow.Modules.Events.Infrastructure.Events;
+using EventFlow.Modules.Events.Infrastructure.PublicApi;
 using EventFlow.Modules.Events.Infrastructure.TicketTypes;
+using EventFlow.Modules.Events.PublicApi.PublicApi;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
@@ -68,5 +70,7 @@ public static class EventsModule
         services.AddScoped<IEventRepository, EventRepository>();
         services.AddScoped<ITicketTypeRepository, TicketTypeRepository>();
         services.AddScoped<ICategoryRepository, CategoryRepository>();
+
+        services.AddScoped<IEventsApi, EventsApi>();
     }
 }
