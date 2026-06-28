@@ -3,21 +3,20 @@ using EventFlow.Common.Domain;
 using EventFlow.Modules.Events.PublicApi.PublicApi;
 using EventFlow.Modules.Ticketing.Domain.Customers;
 using EventFlow.Modules.Ticketing.Domain.Events;
-using EventFlow.Modules.Users.PublicApi;
 
 namespace EventFlow.Modules.Ticketing.Application.Carts.AddItemToCart;
 
 internal sealed class AddItemToCartCommandHandler(
     CartService cartService,
-    IUsersApi usersApi,
+    ICustomerRepository customerRepository,
     IEventsApi eventsApi)
     : ICommandHandler<AddItemToCartCommand>
 {
     public async Task<Result> Handle(AddItemToCartCommand request, CancellationToken cancellationToken)
     {
         // 1. Get customer
-        UserResponse? customer =
-            await usersApi.GetAsync(request.CustomerId, cancellationToken);
+        Customer? customer =
+            await customerRepository.GetAsync(request.CustomerId, cancellationToken);
 
         if (customer is null)
         {
