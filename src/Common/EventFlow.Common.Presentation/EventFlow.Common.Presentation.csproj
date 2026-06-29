@@ -5,6 +5,10 @@
 	</ItemGroup>
 	
 	<ItemGroup>
+	  <PackageReference Include="MassTransit.Abstractions" Version="9.1.2" />
+	</ItemGroup>
+	
+	<ItemGroup>
 	  <ProjectReference Include="..\EventFlow.Common.Domain\EventFlow.Common.Domain.csproj" />
 	</ItemGroup>
 

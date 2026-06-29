@@ -3,9 +3,7 @@ using EventFlow.Common.Presentation.Endpoints;
 using EventFlow.Modules.Users.Application.Abstractions.Data;
 using EventFlow.Modules.Users.Domain.Users;
 using EventFlow.Modules.Users.Infrastructure.Database;
-using EventFlow.Modules.Users.Infrastructure.PublicApi;
 using EventFlow.Modules.Users.Infrastructure.Users;
-using EventFlow.Modules.Users.PublicApi;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
@@ -61,7 +59,5 @@ public static class UsersModule
         // Register the Unit of Work implementation.
         services.AddScoped<IUnitOfWork>(
             sp => sp.GetRequiredService<UsersDbContext>());
-
-        services.AddScoped<IUsersApi, UsersApi>();
     }
 }

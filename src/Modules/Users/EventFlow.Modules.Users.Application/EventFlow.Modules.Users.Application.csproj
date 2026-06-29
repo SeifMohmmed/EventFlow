@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
     <ProjectReference Include="..\..\..\Common\EventFlow.Common.Application\EventFlow.Common.Application.csproj" />
-    <ProjectReference Include="..\..\Ticketing\EventFlow.Modules.Ticketing.PublicApi\EventFlow.Modules.Ticketing.PublicApi.csproj" />
     <ProjectReference Include="..\EventFlow.Modules.Users.Domain\EventFlow.Modules.Users.Domain.csproj" />
+    <ProjectReference Include="..\EventFlow.Modules.Users.IntegrationEvents\EventFlow.Modules.Users.IntegrationEvents.csproj" />
   </ItemGroup>
 </Project>

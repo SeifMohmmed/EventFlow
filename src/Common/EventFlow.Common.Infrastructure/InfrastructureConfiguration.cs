@@ -1,10 +1,12 @@
 ﻿using EventFlow.Common.Application.Caching;
 using EventFlow.Common.Application.Clock;
 using EventFlow.Common.Application.Data;
+using EventFlow.Common.Application.EventBus;
 using EventFlow.Common.Infrastructure.Caching;
 using EventFlow.Common.Infrastructure.Clock;
 using EventFlow.Common.Infrastructure.Data;
 using EventFlow.Common.Infrastructure.Interceptors;
+using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Npgsql;
@@ -24,6 +26,7 @@ public static class InfrastructureConfiguration
     /// </summary>
     public static IServiceCollection AddInfrastructure(
         this IServiceCollection services,
+        Action<IRegistrationConfigurator>[] modelConfigureConsumers,
         string databaseConnectionString,
         string redisConnectionString)
     {
@@ -71,6 +74,29 @@ public static class InfrastructureConfiguration
 
         // Register the application's cache service.
         services.TryAddSingleton<ICacheService, CacheService>();
+
+        // Register the application's event bus abstraction.
+        services.TryAddSingleton<IEventBus, EventBus.EventBus>();
+
+        // Configure MassTransit and register message consumers.
+        services.AddMassTransit(cfg =>
+        {
+            // Register consumers from each module.
+            foreach (Action<IRegistrationConfigurator> configureConsumer in modelConfigureConsumers)
+            {
+                configureConsumer(cfg);
+            }
+
+            // Use kebab-case naming for generated endpoints.
+            cfg.SetKebabCaseEndpointNameFormatter();
+
+            // Configure the in-memory transport.
+            cfg.UsingInMemory((context, configure) =>
+            {
+                // Automatically configure endpoints for all registered consumers.
+                configure.ConfigureEndpoints(context);
+            });
+        });
 
         return services;
     }
