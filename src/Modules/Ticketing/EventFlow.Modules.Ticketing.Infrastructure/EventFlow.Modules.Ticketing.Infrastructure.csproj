@@ -4,5 +4,8 @@
     <ProjectReference Include="..\EventFlow.Modules.Ticketing.Application\EventFlow.Modules.Ticketing.Application.csproj" />
     <ProjectReference Include="..\EventFlow.Modules.Ticketing.Presentation\EventFlow.Modules.Ticketing.Presentation.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Database\Migrations\" />
+  </ItemGroup>
 
 </Project>

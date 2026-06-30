@@ -29,7 +29,7 @@ public sealed class TicketType : Entity
     {
         var ticketType = new TicketType
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.CreateVersion7(),
             EventId = @event.Id,
             Name = name,
             Price = price,
