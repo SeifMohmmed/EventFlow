@@ -37,3 +37,17 @@ services:
     restart: always
     ports:
       - 6379:6379
+
+  eventFlow.identity:
+    image: quay.io/keycloak/keycloak:24.0.0
+    container_name: EventFlow.Identity
+    command: start-dev --import-realm
+    environment:
+      - KC_HEALTH_ENABLED=true
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+    volumes:
+      - ./.containers/identity:/opt/keycloak/data
+      - ./.files:/opt/keycloak/data/import
+    ports:
+      - 18080:8080
