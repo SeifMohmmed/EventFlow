@@ -1,10 +1,19 @@
 ﻿using EventFlow.Common.Infrastructure.Interceptors;
 using EventFlow.Common.Presentation.Endpoints;
 using EventFlow.Modules.Ticketing.Application.Abstractions.Data;
+using EventFlow.Modules.Ticketing.Application.Abstractions.Payments;
 using EventFlow.Modules.Ticketing.Application.Carts;
 using EventFlow.Modules.Ticketing.Domain.Customers;
+using EventFlow.Modules.Ticketing.Domain.Events;
+using EventFlow.Modules.Ticketing.Domain.Orders;
+using EventFlow.Modules.Ticketing.Domain.Payments;
+using EventFlow.Modules.Ticketing.Domain.Tickets;
 using EventFlow.Modules.Ticketing.Infrastructure.Customers;
 using EventFlow.Modules.Ticketing.Infrastructure.Database;
+using EventFlow.Modules.Ticketing.Infrastructure.Events;
+using EventFlow.Modules.Ticketing.Infrastructure.Orders;
+using EventFlow.Modules.Ticketing.Infrastructure.Payments;
+using EventFlow.Modules.Ticketing.Infrastructure.Tickets;
 using EventFlow.Modules.Ticketing.Presentation.Customers;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
@@ -64,6 +73,11 @@ public static class TicketingModule
 
         // Register repositories.
         services.AddScoped<ICustomerRepository, CustomerRepository>();
+        services.AddScoped<IEventRepository, EventRepository>();
+        services.AddScoped<ITicketTypeRepository, TicketTypeRepository>();
+        services.AddScoped<IOrderRepository, OrderRepository>();
+        services.AddScoped<ITicketRepository, TicketRepository>();
+        services.AddScoped<IPaymentRepository, PaymentRepository>();
 
         // Register the Unit of Work implementation.
         services.AddScoped<IUnitOfWork>(
@@ -71,5 +85,7 @@ public static class TicketingModule
 
         // Register the in-memory shopping cart service.
         services.AddSingleton<CartService>();
+
+        services.AddSingleton<IPaymentService, PaymentService>();
     }
 }

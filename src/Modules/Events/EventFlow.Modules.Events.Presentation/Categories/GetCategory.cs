@@ -1,6 +1,6 @@
 ﻿using EventFlow.Common.Domain;
-using EventFlow.Common.Presentation.ApiResults;
 using EventFlow.Common.Presentation.Endpoints;
+using EventFlow.Common.Presentation.Results;
 using EventFlow.Modules.Events.Application.Categories.GetCategory;
 using MediatR;
 using Microsoft.AspNetCore.Builder;

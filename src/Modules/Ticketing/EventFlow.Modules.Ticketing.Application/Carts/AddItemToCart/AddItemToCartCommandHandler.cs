@@ -1,6 +1,5 @@
 ﻿using EventFlow.Common.Application.Messaging;
 using EventFlow.Common.Domain;
-using EventFlow.Modules.Events.PublicApi.PublicApi;
 using EventFlow.Modules.Ticketing.Domain.Customers;
 using EventFlow.Modules.Ticketing.Domain.Events;
 
@@ -9,7 +8,7 @@ namespace EventFlow.Modules.Ticketing.Application.Carts.AddItemToCart;
 internal sealed class AddItemToCartCommandHandler(
     CartService cartService,
     ICustomerRepository customerRepository,
-    IEventsApi eventsApi)
+    ITicketTypeRepository ticketTypeRepository)
     : ICommandHandler<AddItemToCartCommand>
 {
     public async Task<Result> Handle(AddItemToCartCommand request, CancellationToken cancellationToken)
@@ -24,12 +23,17 @@ internal sealed class AddItemToCartCommandHandler(
         }
 
         // 2. Get ticket type
-        TicketTypeResponse? ticketType =
-            await eventsApi.GetTicketTypeAsync(request.TicketTypeId, cancellationToken);
+        TicketType? ticketType =
+            await ticketTypeRepository.GetAsync(request.TicketTypeId, cancellationToken);
 
         if (ticketType is null)
         {
             return Result.Failure(TicketTypeErrors.NotFound(request.TicketTypeId));
+        }
+
+        if (ticketType.AvailableQuantity < request.Quantity)
+        {
+            return Result.Failure(TicketTypeErrors.NotEnoughQuantity(ticketType.AvailableQuantity));
         }
 
         // 3. Add item to cart

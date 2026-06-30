@@ -20,7 +20,7 @@ public sealed class User : Entity
     {
         var user = new User
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.CreateVersion7(),
             Email = email,
             FirstName = firstName,
             LastName = lastName,

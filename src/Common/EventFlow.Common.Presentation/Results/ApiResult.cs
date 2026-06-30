@@ -1,0 +1,89 @@
+﻿using EventFlow.Common.Domain;
+using Microsoft.AspNetCore.Http;
+
+namespace EventFlow.Common.Presentation.Results;
+
+/// <summary>
+/// Provides helper methods for converting
+/// application results into HTTP responses.
+/// </summary>
+public static class ApiResult
+{
+    /// <summary>
+    /// Converts a failed application result into an RFC 7807
+    /// Problem Details response.
+    /// </summary>
+    public static IResult Problem(Result result)
+    {
+        // This method should only be called for failed results.
+        if (result.IsSuccess)
+        {
+            throw new InvalidOperationException();
+        }
+
+        return Microsoft.AspNetCore.Http.Results.Problem(
+            title: GetTitle(result.Error),
+            detail: GetDetail(result.Error),
+            type: GetType(result.Error.Type),
+            statusCode: GetStatusCode(result.Error.Type),
+            extensions: GetErrors(result));
+
+        // Returns the problem title.
+        static string GetTitle(Error error) =>
+            error.Type switch
+            {
+                ErrorType.Validation => error.Code,
+                ErrorType.Problem => error.Code,
+                ErrorType.NotFound => error.Code,
+                ErrorType.Conflict => error.Code,
+                _ => "Server failure"
+            };
+
+        // Returns the problem description.
+        static string GetDetail(Error error) =>
+            error.Type switch
+            {
+                ErrorType.Validation => error.Description,
+                ErrorType.Problem => error.Description,
+                ErrorType.NotFound => error.Description,
+                ErrorType.Conflict => error.Description,
+                _ => "An unexpected error occurred"
+            };
+
+        // Maps the error type to its RFC 7231 documentation.
+        static string GetType(ErrorType errorType) =>
+            errorType switch
+            {
+                ErrorType.Validation => "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+                ErrorType.Problem => "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+                ErrorType.NotFound => "https://tools.ietf.org/html/rfc7231#section-6.5.4",
+                ErrorType.Conflict => "https://tools.ietf.org/html/rfc7231#section-6.5.8",
+                _ => "https://tools.ietf.org/html/rfc7231#section-6.6.1"
+            };
+
+        // Maps the error type to the appropriate HTTP status code.
+        static int GetStatusCode(ErrorType errorType) =>
+            errorType switch
+            {
+                ErrorType.Validation => StatusCodes.Status400BadRequest,
+                ErrorType.Problem => StatusCodes.Status400BadRequest,
+                ErrorType.NotFound => StatusCodes.Status404NotFound,
+                ErrorType.Conflict => StatusCodes.Status409Conflict,
+                _ => StatusCodes.Status500InternalServerError
+            };
+
+        // Adds validation errors to the Problem Details response.
+        static Dictionary<string, object?>? GetErrors(Result result)
+        {
+            if (result.Error is not ValidationError validationError)
+            {
+                return null;
+            }
+
+            return new Dictionary<string, object?>
+            {
+                { "errors", validationError.Errors }
+            };
+        }
+    }
+}

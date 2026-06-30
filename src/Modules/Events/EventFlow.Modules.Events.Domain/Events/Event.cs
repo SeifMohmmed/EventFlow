@@ -64,11 +64,6 @@ public sealed class Event : Entity
 
     public void Reschedule(DateTime startsAtUtc, DateTime? endsAtUtc)
     {
-        if (StartsAtUtc == startsAtUtc && EndsAtUtc == endsAtUtc)
-        {
-            return;
-        }
-
         StartsAtUtc = startsAtUtc;
         EndsAtUtc = endsAtUtc;
 

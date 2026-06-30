@@ -1,7 +1,15 @@
 ﻿using System.Data.Common;
 using EventFlow.Modules.Ticketing.Application.Abstractions.Data;
 using EventFlow.Modules.Ticketing.Domain.Customers;
+using EventFlow.Modules.Ticketing.Domain.Events;
+using EventFlow.Modules.Ticketing.Domain.Orders;
+using EventFlow.Modules.Ticketing.Domain.Payments;
+using EventFlow.Modules.Ticketing.Domain.Tickets;
 using EventFlow.Modules.Ticketing.Infrastructure.Customers;
+using EventFlow.Modules.Ticketing.Infrastructure.Events;
+using EventFlow.Modules.Ticketing.Infrastructure.Orders;
+using EventFlow.Modules.Ticketing.Infrastructure.Payments;
+using EventFlow.Modules.Ticketing.Infrastructure.Tickets;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
@@ -11,12 +19,29 @@ public sealed class TicketingDbContext(DbContextOptions<TicketingDbContext> opti
     : DbContext(options), IUnitOfWork
 {
     internal DbSet<Customer> Customers { get; set; }
+    internal DbSet<Event> Events { get; set; }
+
+    internal DbSet<TicketType> TicketTypes { get; set; }
+
+    internal DbSet<Order> Orders { get; set; }
+
+    internal DbSet<OrderItem> OrderItems { get; set; }
+
+    internal DbSet<Ticket> Tickets { get; set; }
+
+    internal DbSet<Payment> Payments { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema(Schemas.Ticketing);
 
         modelBuilder.ApplyConfiguration(new CustomerConfiguration());
+        modelBuilder.ApplyConfiguration(new EventConfiguration());
+        modelBuilder.ApplyConfiguration(new TicketTypeConfiguration());
+        modelBuilder.ApplyConfiguration(new OrderConfiguration());
+        modelBuilder.ApplyConfiguration(new OrderItemConfiguration());
+        modelBuilder.ApplyConfiguration(new TicketConfiguration());
+        modelBuilder.ApplyConfiguration(new PaymentConfiguration());
     }
 
     public async Task<DbTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default)
