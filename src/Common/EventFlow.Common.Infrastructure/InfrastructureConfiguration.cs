@@ -2,6 +2,7 @@
 using EventFlow.Common.Application.Clock;
 using EventFlow.Common.Application.Data;
 using EventFlow.Common.Application.EventBus;
+using EventFlow.Common.Infrastructure.Authentication;
 using EventFlow.Common.Infrastructure.Caching;
 using EventFlow.Common.Infrastructure.Clock;
 using EventFlow.Common.Infrastructure.Data;
@@ -30,6 +31,9 @@ public static class InfrastructureConfiguration
         string databaseConnectionString,
         string redisConnectionString)
     {
+        // Register authentication and authorization.
+        services.AddAuthenticationInternal();
+
         // Create and register the PostgreSQL data source.
         NpgsqlDataSource npgsqlDataSource =
             new NpgsqlDataSourceBuilder(databaseConnectionString).Build();
