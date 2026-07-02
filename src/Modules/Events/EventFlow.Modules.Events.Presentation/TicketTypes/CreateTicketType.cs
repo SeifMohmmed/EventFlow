@@ -24,6 +24,7 @@ internal sealed class CreateTicketType : IEndpoint
 
             return result.Match(Results.Ok, ApiResult.Problem);
         })
+        .RequireAuthorization(Permissions.ModifyTicketTypes)
         .WithTags(Tags.TicketTypes);
     }
 

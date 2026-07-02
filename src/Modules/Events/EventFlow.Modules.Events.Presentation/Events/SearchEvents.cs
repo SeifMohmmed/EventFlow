@@ -26,6 +26,7 @@ internal sealed class SearchEvents : IEndpoint
 
             return result.Match(Results.Ok, ApiResult.Problem);
         })
+        .RequireAuthorization(Permissions.SearchEvents)
         .WithTags(Tags.Events);
     }
 }

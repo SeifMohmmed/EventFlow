@@ -1,5 +1,6 @@
 ﻿using EventFlow.Common.Infrastructure.Interceptors;
 using EventFlow.Common.Presentation.Endpoints;
+using EventFlow.Modules.Ticketing.Application.Abstractions.Authentication;
 using EventFlow.Modules.Ticketing.Application.Abstractions.Data;
 using EventFlow.Modules.Ticketing.Application.Abstractions.Payments;
 using EventFlow.Modules.Ticketing.Application.Carts;
@@ -8,6 +9,7 @@ using EventFlow.Modules.Ticketing.Domain.Events;
 using EventFlow.Modules.Ticketing.Domain.Orders;
 using EventFlow.Modules.Ticketing.Domain.Payments;
 using EventFlow.Modules.Ticketing.Domain.Tickets;
+using EventFlow.Modules.Ticketing.Infrastructure.Authentication;
 using EventFlow.Modules.Ticketing.Infrastructure.Customers;
 using EventFlow.Modules.Ticketing.Infrastructure.Database;
 using EventFlow.Modules.Ticketing.Infrastructure.Events;
@@ -87,5 +89,7 @@ public static class TicketingModule
         services.AddSingleton<CartService>();
 
         services.AddSingleton<IPaymentService, PaymentService>();
+
+        services.AddScoped<ICustomerContext, CustomerContext>();
     }
 }
