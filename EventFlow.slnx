@@ -14,16 +14,25 @@
     <Project Path="src/Common/EventFlow.Common.Presentation/EventFlow.Common.Presentation.csproj" Id="8386b101-db8e-40d9-b622-2b31ee250ce9" />
   </Folder>
   <Folder Name="/src/Modules/" />
+  <Folder Name="/src/Modules/Attendance/">
+    <Project Path="src/Modules/Attendance/EventFlow.Modules.Attendance.Application/EventFlow.Modules.Attendance.Application.csproj" Id="f880449c-7032-4edc-948a-899b37e418cd" />
+    <Project Path="src/Modules/Attendance/EventFlow.Modules.Attendance.Domain/EventFlow.Modules.Attendance.Domain.csproj" Id="790e48c0-aeae-4f47-bd1e-6a1fcc54d788" />
+    <Project Path="src/Modules/Attendance/EventFlow.Modules.Attendance.Infrastructure/EventFlow.Modules.Attendance.Infrastructure.csproj" Id="53cdc504-abd4-4f6d-904e-1b14b15684dd" />
+    <Project Path="src/Modules/Attendance/EventFlow.Modules.Attendance.IntegrationEvents/EventFlow.Modules.Attendance.IntegrationEvents.csproj" Id="125384c3-7e9e-4a33-93b1-4c4c9450ab48" />
+    <Project Path="src/Modules/Attendance/EventFlow.Modules.Attendance.Presentation/EventFlow.Modules.Attendance.Presentation.csproj" Id="16dc2e2e-ad4c-4e6a-8ede-19a543a11027" />
+  </Folder>
   <Folder Name="/src/Modules/Events/">
     <Project Path="src/Modules/Events/EventFlow.Modules.Events.Application/EventFlow.Modules.Events.Application.csproj" Id="100a16f8-1156-492a-a49f-6f1c4b3c16db" />
     <Project Path="src/Modules/Events/EventFlow.Modules.Events.Domain/EventFlow.Modules.Events.Domain.csproj" Id="fe68220e-351f-4926-bb32-2014c19cc0db" />
     <Project Path="src/Modules/Events/EventFlow.Modules.Events.Infrastructure/EventFlow.Modules.Events.Infrastructure.csproj" />
+    <Project Path="src/Modules/Events/EventFlow.Modules.Events.IntegrationEvents/EventFlow.Modules.Events.IntegrationEvents.csproj" Id="f4062ae3-ef66-481b-8b26-5097412ec5fe" />
     <Project Path="src/Modules/Events/EventFlow.Modules.Events.Presentation/EventFlow.Modules.Events.Presentation.csproj" Id="27aec46b-297e-49fc-a142-a0b82957b003" />
   </Folder>
   <Folder Name="/src/Modules/Ticketing/">
     <Project Path="src/Modules/Ticketing/EventFlow.Modules.Ticketing.Application/EventFlow.Modules.Ticketing.Application.csproj" Id="1942fcf3-52e9-4ee4-8cdc-281555a8659e" />
     <Project Path="src/Modules/Ticketing/EventFlow.Modules.Ticketing.Domain/EventFlow.Modules.Ticketing.Domain.csproj" Id="85befb6a-174a-45f0-8cdc-f735d866feec" />
     <Project Path="src/Modules/Ticketing/EventFlow.Modules.Ticketing.Infrastructure/EventFlow.Modules.Ticketing.Infrastructure.csproj" Id="91c53b08-7ac5-4ce9-9bf3-0445cdd9fc3f" />
+    <Project Path="src/Modules/Ticketing/EventFlow.Modules.Ticketing.IntegrationEvents/EventFlow.Modules.Ticketing.IntegrationEvents.csproj" Id="bee34b22-c2fc-446f-a776-8df02475220c" />
     <Project Path="src/Modules/Ticketing/EventFlow.Modules.Ticketing.Presentation/EventFlow.Modules.Ticketing.Presentation.csproj" Id="bbf26575-973f-4726-82d6-46061b9c6d39" />
   </Folder>
   <Folder Name="/src/Modules/Users/">

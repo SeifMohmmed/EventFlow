@@ -1,0 +1,9 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Common\EventFlow.Common.Presentation\EventFlow.Common.Presentation.csproj" />
+    <ProjectReference Include="..\..\Events\EventFlow.Modules.Events.IntegrationEvents\EventFlow.Modules.Events.IntegrationEvents.csproj" />
+    <ProjectReference Include="..\..\Ticketing\EventFlow.Modules.Ticketing.IntegrationEvents\EventFlow.Modules.Ticketing.IntegrationEvents.csproj" />
+    <ProjectReference Include="..\..\Users\EventFlow.Modules.Users.IntegrationEvents\EventFlow.Modules.Users.IntegrationEvents.csproj" />
+    <ProjectReference Include="..\EventFlow.Modules.Attendance.Application\EventFlow.Modules.Attendance.Application.csproj" />
+  </ItemGroup>
+</Project>

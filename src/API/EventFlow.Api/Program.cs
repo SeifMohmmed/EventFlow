@@ -3,6 +3,7 @@ using EventFlow.Api.Middleware;
 using EventFlow.Common.Application;
 using EventFlow.Common.Infrastructure;
 using EventFlow.Common.Presentation.Endpoints;
+using EventFlow.Modules.Attendance.Infrastructure;
 using EventFlow.Modules.Events.Infrastructure;
 using EventFlow.Modules.Ticketing.Infrastructure;
 using EventFlow.Modules.Users.Infrastructure;
@@ -29,7 +30,8 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddApplication([
     EventFlow.Modules.Events.Application.AssemblyReference.Assembly,
     EventFlow.Modules.Users.Application.AssemblyReference.Assembly,
-    EventFlow.Modules.Ticketing.Application.AssemblyReference.Assembly]);
+    EventFlow.Modules.Ticketing.Application.AssemblyReference.Assembly,
+    EventFlow.Modules.Attendance.Application.AssemblyReference.Assembly]);
 
 string databaseConnectionString = builder.Configuration.GetConnectionString("Database")!;
 string redisConnectionString = builder.Configuration.GetConnectionString("Cache")!;
@@ -49,6 +51,7 @@ builder.Services.AddHealthChecks()
 builder.Services.AddEventModule(builder.Configuration);
 builder.Services.AddUsersModule(builder.Configuration);
 builder.Services.AddTicketingModule(builder.Configuration);
+builder.Services.AddAttendanceModule(builder.Configuration);
 
 WebApplication app = builder.Build();
 

@@ -24,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Modules\Attendance\EventFlow.Modules.Attendance.Infrastructure\EventFlow.Modules.Attendance.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Modules\Events\EventFlow.Modules.Events.Infrastructure\EventFlow.Modules.Events.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Modules\Ticketing\EventFlow.Modules.Ticketing.Infrastructure\EventFlow.Modules.Ticketing.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Modules\Users\EventFlow.Modules.Users.Infrastructure\EventFlow.Modules.Users.Infrastructure.csproj" />
