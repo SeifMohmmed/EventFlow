@@ -4,8 +4,5 @@
     <ProjectReference Include="..\EventFlow.Modules.Users.Application\EventFlow.Modules.Users.Application.csproj" />
     <ProjectReference Include="..\EventFlow.Modules.Users.Presentation\EventFlow.Modules.Users.Presentation.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Database\Migrations\" />
-  </ItemGroup>
 
 </Project>
