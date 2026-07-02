@@ -1,8 +1,10 @@
-﻿using EventFlow.Common.Infrastructure.Interceptors;
+﻿using EventFlow.Common.Application.Authorization;
+using EventFlow.Common.Infrastructure.Interceptors;
 using EventFlow.Common.Presentation.Endpoints;
 using EventFlow.Modules.Users.Application.Abstractions.Data;
 using EventFlow.Modules.Users.Application.Abstractions.Identity;
 using EventFlow.Modules.Users.Domain.Users;
+using EventFlow.Modules.Users.Infrastructure.Authorization;
 using EventFlow.Modules.Users.Infrastructure.Database;
 using EventFlow.Modules.Users.Infrastructure.Identity;
 using EventFlow.Modules.Users.Infrastructure.Users;
@@ -40,6 +42,8 @@ public static class UsersModule
         this IServiceCollection services,
         IConfiguration configuration)
     {
+        services.AddScoped<IPermissionService, PermissionService>();
+
         // Bind Keycloak settings from configuration.
         services.Configure<KeyCloakOptions>(
             configuration.GetSection("Users:KeyCloak"));
