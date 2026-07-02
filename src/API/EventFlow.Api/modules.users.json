@@ -1,5 +1,11 @@
 {
   "Users": {
-
+    "KeyCloak": {
+      "AdminUrl": "http://eventFlow.identity:8080/admin/realms/eventFlow/",
+      "TokenUrl": "http://eventFlow.identity:8080/realms/eventFlow/protocol/openid-connect/token",
+      "ConfidentialClientId": "eventFlow-confidential-client",
+      "ConfidentialClientSecret": "85Xf2fcl6v7sco1escYQvv3Hg4HD1eAo",
+      "PublicClientId": "eventFlow-public-client"
+    }
   }
 }
