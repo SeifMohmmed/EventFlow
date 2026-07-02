@@ -1,4 +1,5 @@
-﻿using EventFlow.Modules.Events.Infrastructure.Database;
+﻿using EventFlow.Modules.Attendance.Infrastructure.Database;
+using EventFlow.Modules.Events.Infrastructure.Database;
 using EventFlow.Modules.Ticketing.Infrastructure.Database;
 using EventFlow.Modules.Users.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +22,7 @@ internal static class MigrationExtensions
         ApplyMigration<EventsDbContext>(scope);
         ApplyMigration<UsersDbContext>(scope);
         ApplyMigration<TicketingDbContext>(scope);
+        ApplyMigration<AttendanceDbContext>(scope);
     }
 
     /// <summary>

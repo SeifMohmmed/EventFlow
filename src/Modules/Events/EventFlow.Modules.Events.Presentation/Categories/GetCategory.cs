@@ -19,6 +19,7 @@ internal sealed class GetCategory : IEndpoint
 
             return result.Match(Results.Ok, ApiResult.Problem);
         })
+        .RequireAuthorization(Permissions.GetCategories)
         .WithTags(Tags.Categories);
     }
 }
