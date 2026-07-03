@@ -1,5 +1,9 @@
 {
   "Users": {
+    "Outbox": {
+      "IntervalInSeconds": 15,
+      "BatchSize": 20
+    },
     "KeyCloak": {
       "AdminUrl": "http://eventFlow.identity:8080/admin/realms/eventFlow/",
       "TokenUrl": "http://eventFlow.identity:8080/realms/eventFlow/protocol/openid-connect/token",

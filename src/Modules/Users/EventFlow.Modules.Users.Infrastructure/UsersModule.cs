@@ -1,5 +1,5 @@
 ﻿using EventFlow.Common.Application.Authorization;
-using EventFlow.Common.Infrastructure.Interceptors;
+using EventFlow.Common.Infrastructure.Outbox;
 using EventFlow.Common.Presentation.Endpoints;
 using EventFlow.Modules.Users.Application.Abstractions.Data;
 using EventFlow.Modules.Users.Application.Abstractions.Identity;
@@ -7,6 +7,7 @@ using EventFlow.Modules.Users.Domain.Users;
 using EventFlow.Modules.Users.Infrastructure.Authorization;
 using EventFlow.Modules.Users.Infrastructure.Database;
 using EventFlow.Modules.Users.Infrastructure.Identity;
+using EventFlow.Modules.Users.Infrastructure.Outbox;
 using EventFlow.Modules.Users.Infrastructure.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
@@ -80,7 +81,7 @@ public static class UsersModule
                             Schemas.Users))
                 // Publish domain events after a successful SaveChanges call.
                 .AddInterceptors(
-                    sp.GetRequiredService<PublishDomainEventsInterceptor>())
+                    sp.GetRequiredService<InsertOutboxMessagesInterceptor>())
                 // Convert table and column names to snake_case.
                 .UseSnakeCaseNamingConvention());
 
@@ -90,5 +91,12 @@ public static class UsersModule
         // Register the Unit of Work implementation.
         services.AddScoped<IUnitOfWork>(
             sp => sp.GetRequiredService<UsersDbContext>());
+
+        // Bind Users module outbox settings from configuration.
+        services.Configure<OutboxOptions>(
+            configuration.GetSection("Users:Outbox"));
+
+        // Register Quartz configuration for the outbox processing job.
+        services.ConfigureOptions<ConfigureProcessOutboxJob>();
     }
 }

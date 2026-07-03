@@ -1,4 +1,5 @@
-﻿using EventFlow.Modules.Events.Application.Abstractions.Data;
+﻿using EventFlow.Common.Infrastructure.Outbox;
+using EventFlow.Modules.Events.Application.Abstractions.Data;
 using EventFlow.Modules.Events.Domain;
 using EventFlow.Modules.Events.Domain.Categories;
 using EventFlow.Modules.Events.Domain.TicketTypes;
@@ -27,6 +28,7 @@ public sealed class EventsDbContext(
     {
         modelBuilder.HasDefaultSchema(Schemas.Events);
 
+        modelBuilder.ApplyConfiguration(new OutboxMessageConfiguration());
         modelBuilder.ApplyConfiguration(new EventConfiguration());
         modelBuilder.ApplyConfiguration(new TicketTypeConfiguration());
     }

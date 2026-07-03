@@ -41,7 +41,7 @@ builder.Services.AddInfrastructure(
     databaseConnectionString,
     redisConnectionString);
 
-builder.Configuration.AddModuleConfiguration(["events", "users", "ticketing"]);
+builder.Configuration.AddModuleConfiguration(["users", "events", "ticketing", "attendance"]);
 
 builder.Services.AddHealthChecks()
     .AddNpgSql(databaseConnectionString)
