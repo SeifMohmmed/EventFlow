@@ -6,7 +6,7 @@ namespace EventFlow.Modules.Events.Domain;
 
 public sealed class Event : Entity
 {
-    public Event()
+    private Event()
     {
 
     }
