@@ -1,4 +1,4 @@
-﻿using EventFlow.Common.Infrastructure.Interceptors;
+﻿using EventFlow.Common.Infrastructure.Outbox;
 using EventFlow.Common.Presentation.Endpoints;
 using EventFlow.Modules.Ticketing.Application.Abstractions.Authentication;
 using EventFlow.Modules.Ticketing.Application.Abstractions.Data;
@@ -14,6 +14,7 @@ using EventFlow.Modules.Ticketing.Infrastructure.Customers;
 using EventFlow.Modules.Ticketing.Infrastructure.Database;
 using EventFlow.Modules.Ticketing.Infrastructure.Events;
 using EventFlow.Modules.Ticketing.Infrastructure.Orders;
+using EventFlow.Modules.Ticketing.Infrastructure.Outbox;
 using EventFlow.Modules.Ticketing.Infrastructure.Payments;
 using EventFlow.Modules.Ticketing.Infrastructure.Tickets;
 using EventFlow.Modules.Ticketing.Presentation.Customers;
@@ -69,7 +70,7 @@ public static class TicketingModule
                             Schemas.Ticketing))
                 // Publish domain events after a successful SaveChanges call.
                 .AddInterceptors(
-                    sp.GetRequiredService<PublishDomainEventsInterceptor>())
+                    sp.GetRequiredService<InsertOutboxMessagesInterceptor>())
                 // Convert table and column names to snake_case.
                 .UseSnakeCaseNamingConvention());
 
@@ -91,5 +92,12 @@ public static class TicketingModule
         services.AddSingleton<IPaymentService, PaymentService>();
 
         services.AddScoped<ICustomerContext, CustomerContext>();
+
+        // Bind Ticketing module outbox settings from configuration.
+        services.Configure<OutboxOptions>(
+            configuration.GetSection("Ticketing:Outbox"));
+
+        // Register Quartz configuration for the outbox processing job.
+        services.ConfigureOptions<ConfigureProcessOutboxJob>();
     }
 }

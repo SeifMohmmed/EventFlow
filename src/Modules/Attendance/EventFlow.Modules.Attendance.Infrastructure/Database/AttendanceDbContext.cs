@@ -1,4 +1,5 @@
-﻿using EventFlow.Modules.Attendance.Application.Abstractions.Data;
+﻿using EventFlow.Common.Infrastructure.Outbox;
+using EventFlow.Modules.Attendance.Application.Abstractions.Data;
 using EventFlow.Modules.Attendance.Domain.Attendees;
 using EventFlow.Modules.Attendance.Domain.Events;
 using EventFlow.Modules.Attendance.Domain.Tickets;
@@ -22,6 +23,7 @@ public sealed class AttendanceDbContext(DbContextOptions<AttendanceDbContext> op
     {
         modelBuilder.HasDefaultSchema(Schemas.Attendance);
 
+        modelBuilder.ApplyConfiguration(new OutboxMessageConfiguration());
         modelBuilder.ApplyConfiguration(new AttendeeConfiguration());
         modelBuilder.ApplyConfiguration(new EventConfiguration());
         modelBuilder.ApplyConfiguration(new TicketConfiguration());

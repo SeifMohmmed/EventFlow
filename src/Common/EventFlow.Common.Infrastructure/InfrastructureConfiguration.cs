@@ -7,11 +7,12 @@ using EventFlow.Common.Infrastructure.Authorization;
 using EventFlow.Common.Infrastructure.Caching;
 using EventFlow.Common.Infrastructure.Clock;
 using EventFlow.Common.Infrastructure.Data;
-using EventFlow.Common.Infrastructure.Interceptors;
+using EventFlow.Common.Infrastructure.Outbox;
 using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Npgsql;
+using Quartz;
 using StackExchange.Redis;
 
 namespace EventFlow.Common.Infrastructure;
@@ -50,7 +51,15 @@ public static class InfrastructureConfiguration
         // Register the application's date/time provider.
         services.TryAddSingleton<IDateTimeProvider, DateTimeProvider>();
 
-        services.TryAddSingleton<PublishDomainEventsInterceptor>();
+        // Register the EF Core interceptor that creates outbox messages.
+        services.TryAddSingleton<InsertOutboxMessagesInterceptor>();
+
+        // Register Quartz services.
+        services.AddQuartz();
+
+        // Run Quartz as a hosted background service.
+        services.AddQuartzHostedService(options =>
+            options.WaitForJobsToComplete = true);
 
         try
         {

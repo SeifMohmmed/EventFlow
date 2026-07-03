@@ -1,4 +1,4 @@
-﻿using EventFlow.Common.Infrastructure.Interceptors;
+﻿using EventFlow.Common.Infrastructure.Outbox;
 using EventFlow.Common.Presentation.Endpoints;
 using EventFlow.Modules.Attendance.Application.Abstractions.Authentication;
 using EventFlow.Modules.Attendance.Application.Abstractions.Data;
@@ -9,6 +9,7 @@ using EventFlow.Modules.Attendance.Infrastructure.Attendees;
 using EventFlow.Modules.Attendance.Infrastructure.Authentication;
 using EventFlow.Modules.Attendance.Infrastructure.Database;
 using EventFlow.Modules.Attendance.Infrastructure.Events;
+using EventFlow.Modules.Attendance.Infrastructure.Outbox;
 using EventFlow.Modules.Attendance.Infrastructure.Tickets;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
@@ -39,7 +40,7 @@ public static class AttendanceModule
                     npgsqlOptions => npgsqlOptions
                         .MigrationsHistoryTable(HistoryRepository.DefaultTableName, Schemas.Attendance))
                 .UseSnakeCaseNamingConvention()
-                .AddInterceptors(sp.GetRequiredService<PublishDomainEventsInterceptor>()));
+                .AddInterceptors(sp.GetRequiredService<InsertOutboxMessagesInterceptor>()));
 
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<AttendanceDbContext>());
 
@@ -48,5 +49,12 @@ public static class AttendanceModule
         services.AddScoped<ITicketRepository, TicketRepository>();
 
         services.AddScoped<IAttendanceContext, AttendanceContext>();
+
+        // Bind Attendance module outbox settings from configuration.
+        services.Configure<OutboxOptions>(
+            configuration.GetSection("Attendance:Outbox"));
+
+        // Register Quartz configuration for the outbox processing job.
+        services.ConfigureOptions<ConfigureProcessOutboxJob>();
     }
 }

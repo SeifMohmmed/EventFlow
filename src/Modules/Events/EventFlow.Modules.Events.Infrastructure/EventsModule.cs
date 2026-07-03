@@ -1,4 +1,4 @@
-﻿using EventFlow.Common.Infrastructure.Interceptors;
+﻿using EventFlow.Common.Infrastructure.Outbox;
 using EventFlow.Common.Presentation.Endpoints;
 using EventFlow.Modules.Events.Application.Abstractions.Data;
 using EventFlow.Modules.Events.Domain.Categories;
@@ -7,6 +7,7 @@ using EventFlow.Modules.Events.Domain.TicketTypes;
 using EventFlow.Modules.Events.Infrastructure.Categories;
 using EventFlow.Modules.Events.Infrastructure.Database;
 using EventFlow.Modules.Events.Infrastructure.Events;
+using EventFlow.Modules.Events.Infrastructure.Outbox;
 using EventFlow.Modules.Events.Infrastructure.TicketTypes;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
@@ -58,7 +59,7 @@ public static class EventsModule
                 .UseSnakeCaseNamingConvention()
                 // Publish domain events after a successful SaveChanges call.
                 .AddInterceptors(
-                    sp.GetRequiredService<PublishDomainEventsInterceptor>()));
+                    sp.GetRequiredService<InsertOutboxMessagesInterceptor>()));
 
         // Register the Unit of Work implementation.
         services.AddScoped<IUnitOfWork>(
@@ -68,5 +69,12 @@ public static class EventsModule
         services.AddScoped<IEventRepository, EventRepository>();
         services.AddScoped<ITicketTypeRepository, TicketTypeRepository>();
         services.AddScoped<ICategoryRepository, CategoryRepository>();
+
+        // Bind Events module outbox settings from configuration.
+        services.Configure<OutboxOptions>(
+            configuration.GetSection("Events:Outbox"));
+
+        // Register Quartz configuration for the outbox processing job.
+        services.ConfigureOptions<ConfigureProcessOutboxJob>();
     }
 }
