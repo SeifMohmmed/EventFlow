@@ -40,7 +40,8 @@ public sealed class Event : Entity
             Description = description,
             Location = location,
             StartsAtUtc = startAtUtc,
-            EndsAtUtc = endAtUtc
+            EndsAtUtc = endAtUtc,
+            Status = EventStatus.Draft
         };
 
         @event.Raise(new EventCreatedDomainEvent(@event.Id));

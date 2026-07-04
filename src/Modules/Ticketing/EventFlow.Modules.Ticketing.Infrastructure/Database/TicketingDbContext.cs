@@ -1,4 +1,5 @@
 ﻿using System.Data.Common;
+using EventFlow.Common.Infrastructure.Inbox;
 using EventFlow.Common.Infrastructure.Outbox;
 using EventFlow.Modules.Ticketing.Application.Abstractions.Data;
 using EventFlow.Modules.Ticketing.Domain.Customers;
@@ -36,6 +37,8 @@ public sealed class TicketingDbContext(DbContextOptions<TicketingDbContext> opti
     {
         modelBuilder.HasDefaultSchema(Schemas.Ticketing);
 
+        modelBuilder.ApplyConfiguration(new InboxMessageConsumerConfiguration());
+        modelBuilder.ApplyConfiguration(new InboxMessageConfiguration());
         modelBuilder.ApplyConfiguration(new OutboxMessageConsumerConfiguration());
         modelBuilder.ApplyConfiguration(new OutboxMessageConfiguration());
         modelBuilder.ApplyConfiguration(new CustomerConfiguration());

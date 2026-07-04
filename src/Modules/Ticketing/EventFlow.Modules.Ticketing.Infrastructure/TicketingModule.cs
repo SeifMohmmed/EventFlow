@@ -1,6 +1,8 @@
-﻿using EventFlow.Common.Application.Messaging;
+﻿using EventFlow.Common.Application.EventBus;
+using EventFlow.Common.Application.Messaging;
 using EventFlow.Common.Infrastructure.Outbox;
 using EventFlow.Common.Presentation.Endpoints;
+using EventFlow.Modules.Events.IntegrationEvents;
 using EventFlow.Modules.Ticketing.Application.Abstractions.Authentication;
 using EventFlow.Modules.Ticketing.Application.Abstractions.Data;
 using EventFlow.Modules.Ticketing.Application.Abstractions.Payments;
@@ -14,11 +16,12 @@ using EventFlow.Modules.Ticketing.Infrastructure.Authentication;
 using EventFlow.Modules.Ticketing.Infrastructure.Customers;
 using EventFlow.Modules.Ticketing.Infrastructure.Database;
 using EventFlow.Modules.Ticketing.Infrastructure.Events;
+using EventFlow.Modules.Ticketing.Infrastructure.Inbox;
 using EventFlow.Modules.Ticketing.Infrastructure.Orders;
 using EventFlow.Modules.Ticketing.Infrastructure.Outbox;
 using EventFlow.Modules.Ticketing.Infrastructure.Payments;
 using EventFlow.Modules.Ticketing.Infrastructure.Tickets;
-using EventFlow.Modules.Ticketing.Presentation.Customers;
+using EventFlow.Modules.Users.IntegrationEvents;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
@@ -36,6 +39,10 @@ public static class TicketingModule
         this IServiceCollection services,
         IConfiguration configuration)
     {
+        services.AddDomainEventHandlers();
+
+        services.AddIntegrationEventHandlers();
+
         services.AddInfrastructure(configuration);
 
         // Discover and register the module's endpoints.
@@ -50,7 +57,10 @@ public static class TicketingModule
     public static void ConfigureConsumers(
         IRegistrationConfigurator registrationConfigurator)
     {
-        registrationConfigurator.AddConsumer<UserRegisteredIntegrationEventConsumer>();
+        registrationConfigurator.AddConsumer<IntegrationEventConsumer<UserRegisteredIntegrationEvent>>();
+        registrationConfigurator.AddConsumer<IntegrationEventConsumer<UserProfileUpdatedIntegrationEvent>>();
+        registrationConfigurator.AddConsumer<IntegrationEventConsumer<EventPublishedIntegrationEvent>>();
+        registrationConfigurator.AddConsumer<IntegrationEventConsumer<TicketTypePriceChangedIntegrationEvent>>();
     }
 
     /// <summary>
@@ -60,8 +70,6 @@ public static class TicketingModule
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        services.AddDomainEventHandlers();
-
         // Register the Ticketing module DbContext and configure PostgreSQL,
         // migration history, domain event publishing, and snake_case naming.
         services.AddDbContext<TicketingDbContext>((sp, options) =>
@@ -134,4 +142,28 @@ public static class TicketingModule
             services.Decorate(domainEventHandler, closedIdempotentHandler);
         }
     }
+    private static void AddIntegrationEventHandlers(this IServiceCollection services)
+    {
+        Type[] integrationEventHandlers = Presentation.AssemblyReference.Assembly
+            .GetTypes()
+            .Where(t => t.IsAssignableTo(typeof(IIntegrationEventHandler)))
+            .ToArray();
+
+        foreach (Type integrationEventHandler in integrationEventHandlers)
+        {
+            services.TryAddScoped(integrationEventHandler);
+
+            Type integrationEvent = integrationEventHandler
+                .GetInterfaces()
+                .Single(i => i.IsGenericType)
+                .GetGenericArguments()
+                .Single();
+
+            Type closedIdempotentHandler =
+                typeof(IdempotentIntegrationEventHandler<>).MakeGenericType(integrationEvent);
+
+            services.Decorate(integrationEventHandler, closedIdempotentHandler);
+        }
+    }
+
 }

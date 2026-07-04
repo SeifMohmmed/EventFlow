@@ -37,20 +37,28 @@ string databaseConnectionString = builder.Configuration.GetConnectionString("Dat
 string redisConnectionString = builder.Configuration.GetConnectionString("Cache")!;
 
 builder.Services.AddInfrastructure(
-    [TicketingModule.ConfigureConsumers],
+    [
+         TicketingModule.ConfigureConsumers,
+         AttendanceModule.ConfigureConsumers
+    ],
     databaseConnectionString,
     redisConnectionString);
 
-builder.Configuration.AddModuleConfiguration(["users", "events", "ticketing", "attendance"]);
+Uri keyCloakHealthUrl = builder.Configuration.GetKeyCloakHealthUrl();
 
 builder.Services.AddHealthChecks()
     .AddNpgSql(databaseConnectionString)
     .AddRedis(redisConnectionString)
-    .AddUrlGroup(new Uri(builder.Configuration.GetValue<string>("KeyCloak:HealthUrl")!), HttpMethod.Get, "keycloak");
+    .AddUrlGroup(keyCloakHealthUrl);
+
+builder.Configuration.AddModuleConfiguration(["users", "events", "ticketing", "attendance"]);
 
 builder.Services.AddEventModule(builder.Configuration);
+
 builder.Services.AddUsersModule(builder.Configuration);
+
 builder.Services.AddTicketingModule(builder.Configuration);
+
 builder.Services.AddAttendanceModule(builder.Configuration);
 
 WebApplication app = builder.Build();

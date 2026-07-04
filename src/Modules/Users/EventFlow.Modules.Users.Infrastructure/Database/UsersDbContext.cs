@@ -1,4 +1,5 @@
-﻿using EventFlow.Common.Infrastructure.Outbox;
+﻿using EventFlow.Common.Infrastructure.Inbox;
+using EventFlow.Common.Infrastructure.Outbox;
 using EventFlow.Modules.Users.Application.Abstractions.Data;
 using EventFlow.Modules.Users.Domain.Users;
 using EventFlow.Modules.Users.Infrastructure.Users;
@@ -14,6 +15,8 @@ public sealed class UsersDbContext(DbContextOptions<UsersDbContext> options) : D
     {
         modelBuilder.HasDefaultSchema(Schemas.Users);
 
+        modelBuilder.ApplyConfiguration(new InboxMessageConsumerConfiguration());
+        modelBuilder.ApplyConfiguration(new InboxMessageConfiguration());
         modelBuilder.ApplyConfiguration(new OutboxMessageConsumerConfiguration());
         modelBuilder.ApplyConfiguration(new OutboxMessageConfiguration());
         modelBuilder.ApplyConfiguration(new UserConfiguration());
