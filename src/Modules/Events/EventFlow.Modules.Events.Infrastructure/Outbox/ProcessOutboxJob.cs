@@ -3,9 +3,10 @@ using System.Data.Common;
 using Dapper;
 using EventFlow.Common.Application.Clock;
 using EventFlow.Common.Application.Data;
+using EventFlow.Common.Application.Messaging;
 using EventFlow.Common.Domain;
+using EventFlow.Common.Infrastructure.Outbox;
 using EventFlow.Common.Infrastructure.Serialization;
-using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -52,10 +53,18 @@ internal sealed class ProcessOutboxJob(
                 // Resolve MediatR from a new DI scope.
                 using IServiceScope scope = serviceScopeFactory.CreateScope();
 
-                IPublisher publisher = scope.ServiceProvider.GetRequiredService<IPublisher>();
+                // Resolve domain event handlers from the current module.
+                IEnumerable<IDomainEventHandler> domainEventHandlers =
+                    DomainEventHandlersFactory.GetHandlers(
+                        domainEvent.GetType(),
+                        scope.ServiceProvider,
+                        Application.AssemblyReference.Assembly);
 
-                // Publish the domain event.
-                await publisher.Publish(domainEvent);
+                foreach (IDomainEventHandler domainEventHandler in domainEventHandlers)
+                {
+                    // Invoke each handler for the domain event.
+                    await domainEventHandler.Handle(domainEvent);
+                }
             }
             catch (Exception caughtException)
             {

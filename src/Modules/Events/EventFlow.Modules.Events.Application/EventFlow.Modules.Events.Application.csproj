@@ -2,6 +2,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Common\EventFlow.Common.Application\EventFlow.Common.Application.csproj" />
     <ProjectReference Include="..\EventFlow.Modules.Events.Domain\EventFlow.Modules.Events.Domain.csproj" />
+    <ProjectReference Include="..\EventFlow.Modules.Events.IntegrationEvents\EventFlow.Modules.Events.IntegrationEvents.csproj" />
   </ItemGroup>
 
 </Project>
