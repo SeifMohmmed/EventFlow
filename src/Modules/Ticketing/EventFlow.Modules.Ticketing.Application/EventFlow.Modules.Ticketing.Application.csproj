@@ -3,6 +3,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Common\EventFlow.Common.Application\EventFlow.Common.Application.csproj" />
     <ProjectReference Include="..\EventFlow.Modules.Ticketing.Domain\EventFlow.Modules.Ticketing.Domain.csproj" />
+    <ProjectReference Include="..\EventFlow.Modules.Ticketing.IntegrationEvents\EventFlow.Modules.Ticketing.IntegrationEvents.csproj" />
   </ItemGroup>
 
 </Project>

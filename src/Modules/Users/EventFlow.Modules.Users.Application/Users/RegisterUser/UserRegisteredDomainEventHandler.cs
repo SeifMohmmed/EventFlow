@@ -16,15 +16,15 @@ namespace EventFlow.Modules.Users.Application.Users.RegisterUser;
 internal sealed class UserRegisteredDomainEventHandler(
     ISender sender,
     IEventBus eventBus)
-    : IDomainEventHandler<UserRegisteredDomainEvent>
+    : DomainEventHandler<UserRegisteredDomainEvent>
 {
     /// <summary>
     /// Publishes a <see cref="UserRegisteredIntegrationEvents"/>
     /// after retrieving the registered user's details.
     /// </summary>
-    public async Task Handle(
+    public override async Task Handle(
         UserRegisteredDomainEvent notification,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken = default)
     {
         // Retrieve the registered user's details.
         Result<UserResponse> result =

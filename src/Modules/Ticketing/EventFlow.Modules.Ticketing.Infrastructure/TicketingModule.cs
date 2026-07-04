@@ -1,4 +1,5 @@
-﻿using EventFlow.Common.Infrastructure.Outbox;
+﻿using EventFlow.Common.Application.Messaging;
+using EventFlow.Common.Infrastructure.Outbox;
 using EventFlow.Common.Presentation.Endpoints;
 using EventFlow.Modules.Ticketing.Application.Abstractions.Authentication;
 using EventFlow.Modules.Ticketing.Application.Abstractions.Data;
@@ -23,6 +24,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 namespace EventFlow.Modules.Ticketing.Infrastructure;
 
 public static class TicketingModule
@@ -58,6 +60,8 @@ public static class TicketingModule
         this IServiceCollection services,
         IConfiguration configuration)
     {
+        services.AddDomainEventHandlers();
+
         // Register the Ticketing module DbContext and configure PostgreSQL,
         // migration history, domain event publishing, and snake_case naming.
         services.AddDbContext<TicketingDbContext>((sp, options) =>
@@ -99,5 +103,35 @@ public static class TicketingModule
 
         // Register Quartz configuration for the outbox processing job.
         services.ConfigureOptions<ConfigureProcessOutboxJob>();
+    }
+
+    private static void AddDomainEventHandlers(this IServiceCollection services)
+    {
+        // Discover all domain event handlers in the Application assembly.
+        Type[] domainEventHandlers = Application.AssemblyReference.Assembly
+            .GetTypes()
+            .Where(t => t.IsAssignableTo(typeof(IDomainEventHandler)))
+            .ToArray();
+
+        foreach (Type domainEventHandler in domainEventHandlers)
+        {
+            // Register the original handler.
+            services.TryAddScoped(domainEventHandler);
+
+            // Determine the domain event handled by this handler.
+            Type domainEvent = domainEventHandler
+                .GetInterfaces()
+                .Single(i => i.IsGenericType)
+                .GetGenericArguments()
+                .Single();
+
+            // Create the matching IdempotentDomainEventHandler<T>.
+            Type closedIdempotentHandler =
+                typeof(IdempotentDomainEventHandler<>)
+                    .MakeGenericType(domainEvent);
+
+            // Decorate the original handler with the idempotent wrapper.
+            services.Decorate(domainEventHandler, closedIdempotentHandler);
+        }
     }
 }
