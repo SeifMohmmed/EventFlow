@@ -1,4 +1,5 @@
-﻿using EventFlow.Common.Application.Messaging;
+﻿using EventFlow.Common.Application.EventBus;
+using EventFlow.Common.Application.Messaging;
 using EventFlow.Common.Infrastructure.Outbox;
 using EventFlow.Common.Presentation.Endpoints;
 using EventFlow.Modules.Attendance.Application.Abstractions.Authentication;
@@ -10,8 +11,13 @@ using EventFlow.Modules.Attendance.Infrastructure.Attendees;
 using EventFlow.Modules.Attendance.Infrastructure.Authentication;
 using EventFlow.Modules.Attendance.Infrastructure.Database;
 using EventFlow.Modules.Attendance.Infrastructure.Events;
+using EventFlow.Modules.Attendance.Infrastructure.Inbox;
 using EventFlow.Modules.Attendance.Infrastructure.Outbox;
 using EventFlow.Modules.Attendance.Infrastructure.Tickets;
+using EventFlow.Modules.Events.IntegrationEvents;
+using EventFlow.Modules.Ticketing.IntegrationEvents;
+using EventFlow.Modules.Users.IntegrationEvents;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
@@ -28,11 +34,20 @@ public static class AttendanceModule
     {
         services.AddDomainEventHandlers();
 
+        services.AddIntegrationEventHandlers();
+
         services.AddInfrastructure(configuration);
 
         services.AddEndpoints(Presentation.AssemblyReference.Assembly);
 
         return services;
+    }
+    public static void ConfigureConsumers(IRegistrationConfigurator registrationConfigurator)
+    {
+        registrationConfigurator.AddConsumer<IntegrationEventConsumer<UserRegisteredIntegrationEvent>>();
+        registrationConfigurator.AddConsumer<IntegrationEventConsumer<UserProfileUpdatedIntegrationEvent>>();
+        registrationConfigurator.AddConsumer<IntegrationEventConsumer<EventPublishedIntegrationEvent>>();
+        registrationConfigurator.AddConsumer<IntegrationEventConsumer<TicketIssuedIntegrationEvent>>();
     }
 
     private static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
@@ -60,6 +75,10 @@ public static class AttendanceModule
 
         // Register Quartz configuration for the outbox processing job.
         services.ConfigureOptions<ConfigureProcessOutboxJob>();
+
+        services.Configure<InboxOptions>(configuration.GetSection("Attendance:Inbox"));
+
+        services.ConfigureOptions<ConfigureProcessInboxJob>();
     }
     private static void AddDomainEventHandlers(this IServiceCollection services)
     {
@@ -88,6 +107,29 @@ public static class AttendanceModule
 
             // Decorate the original handler with the idempotent wrapper.
             services.Decorate(domainEventHandler, closedIdempotentHandler);
+        }
+    }
+    private static void AddIntegrationEventHandlers(this IServiceCollection services)
+    {
+        Type[] integrationEventHandlers = Presentation.AssemblyReference.Assembly
+            .GetTypes()
+            .Where(t => t.IsAssignableTo(typeof(IIntegrationEventHandler)))
+            .ToArray();
+
+        foreach (Type integrationEventHandler in integrationEventHandlers)
+        {
+            services.TryAddScoped(integrationEventHandler);
+
+            Type integrationEvent = integrationEventHandler
+                .GetInterfaces()
+                .Single(i => i.IsGenericType)
+                .GetGenericArguments()
+                .Single();
+
+            Type closedIdempotentHandler =
+                typeof(IdempotentIntegrationEventHandler<>).MakeGenericType(integrationEvent);
+
+            services.Decorate(integrationEventHandler, closedIdempotentHandler);
         }
     }
 }
