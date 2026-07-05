@@ -1,3 +1,4 @@
+using System.Reflection;
 using EventFlow.Api.Extensions;
 using EventFlow.Api.Middleware;
 using EventFlow.Common.Application;
@@ -27,11 +28,13 @@ builder.Services.AddSwaggerGen(options =>
     options.CustomSchemaIds(type => type.FullName?.Replace("+", "."));
 });
 
-builder.Services.AddApplication([
+Assembly[] moduleApplicationAssemblies = [
     EventFlow.Modules.Events.Application.AssemblyReference.Assembly,
     EventFlow.Modules.Users.Application.AssemblyReference.Assembly,
     EventFlow.Modules.Ticketing.Application.AssemblyReference.Assembly,
-    EventFlow.Modules.Attendance.Application.AssemblyReference.Assembly]);
+    EventFlow.Modules.Attendance.Application.AssemblyReference.Assembly];
+
+builder.Services.AddApplication(moduleApplicationAssemblies);
 
 string databaseConnectionString = builder.Configuration.GetConnectionString("Database")!;
 string redisConnectionString = builder.Configuration.GetConnectionString("Cache")!;
@@ -49,7 +52,7 @@ Uri keyCloakHealthUrl = builder.Configuration.GetKeyCloakHealthUrl();
 builder.Services.AddHealthChecks()
     .AddNpgSql(databaseConnectionString)
     .AddRedis(redisConnectionString)
-    .AddUrlGroup(keyCloakHealthUrl);
+    .AddKeyCloak(keyCloakHealthUrl);
 
 builder.Configuration.AddModuleConfiguration(["users", "events", "ticketing", "attendance"]);
 
@@ -71,8 +74,6 @@ if (app.Environment.IsDevelopment())
     app.ApplyMigrations();
 }
 
-app.MapEndpoints();
-
 app.MapHealthChecks("health", new HealthCheckOptions
 {
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
@@ -85,5 +86,7 @@ app.UseExceptionHandler();
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.MapEndpoints();
 
 await app.RunAsync();

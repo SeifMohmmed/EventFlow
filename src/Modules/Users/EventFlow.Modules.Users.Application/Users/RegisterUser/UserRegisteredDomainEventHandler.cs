@@ -42,7 +42,7 @@ internal sealed class UserRegisteredDomainEventHandler(
         // Publish an integration event so other modules
         // can react to the new user.
         await eventBus.PublishAsync(
-            new UserRegisteredIntegrationEvents(
+            new UserRegisteredIntegrationEvent(
                 notification.Id,
                 notification.OccurredOnUtc,
                 result.Value.Id,
