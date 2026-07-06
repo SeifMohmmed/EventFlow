@@ -14,6 +14,7 @@ internal sealed class UserRegisteredIntegrationEventHandler(ISender sender)
         UserRegisteredIntegrationEvent integrationEvent,
         CancellationToken cancellationToken = default)
     {
+        //Event-Carried State Transfer
         Result result = await sender.Send(
             new CreateAttendeeCommand(
                 integrationEvent.UserId,
