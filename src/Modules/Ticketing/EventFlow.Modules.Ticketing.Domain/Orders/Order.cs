@@ -37,7 +37,7 @@ public sealed class Order : Entity
             Status = OrderStatus.Pending,
             CreatedAtUtc = DateTime.UtcNow
         };
-
+        //Event Notifications Pattern
         order.Raise(new OrderCreatedDomainEvent(order.Id));
 
         return order;

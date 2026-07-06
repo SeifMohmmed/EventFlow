@@ -10,6 +10,7 @@ namespace EventFlow.Modules.Ticketing.Application.Orders.CreateOrder;
 internal sealed class CreateTicketsDomainEventHandler(ISender sender)
     : DomainEventHandler<OrderCreatedDomainEvent>
 {
+    //Event Notifications Pattern
     public override async Task Handle(
         OrderCreatedDomainEvent notification,
         CancellationToken cancellationToken = default)

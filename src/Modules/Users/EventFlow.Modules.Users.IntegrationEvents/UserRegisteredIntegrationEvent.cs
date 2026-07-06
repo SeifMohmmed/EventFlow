@@ -4,6 +4,7 @@ namespace EventFlow.Modules.Users.IntegrationEvents;
 
 public sealed class UserRegisteredIntegrationEvent : IntegrationEvent
 {
+    //Event-Carried State Transfer
     public UserRegisteredIntegrationEvent(
         Guid id,
         DateTime occurredOnUtc,

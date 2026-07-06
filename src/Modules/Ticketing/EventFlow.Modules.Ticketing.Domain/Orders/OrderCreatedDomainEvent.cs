@@ -4,5 +4,6 @@ namespace EventFlow.Modules.Ticketing.Domain.Orders;
 
 public sealed class OrderCreatedDomainEvent(Guid orderId) : DomainEvent
 {
+    //Event Notifications Pattern
     public Guid OrderId { get; init; } = orderId;
 }
