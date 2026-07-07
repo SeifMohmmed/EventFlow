@@ -7,6 +7,7 @@ using MediatR;
 
 namespace EventFlow.Modules.Ticketing.Presentation.Events;
 
+// Creates the corresponding Ticketing event after it has been published in the Events module.
 internal sealed class EventPublishedIntegrationEventHandler(ISender sender)
     : IntegrationEventHandler<EventPublishedIntegrationEvent>
 {
@@ -33,6 +34,7 @@ internal sealed class EventPublishedIntegrationEventHandler(ISender sender)
                     .ToList()),
             cancellationToken);
 
+        // Throw to trigger the message bus retry/error handling pipeline.
         if (result.IsFailure)
         {
             throw new EventFlowException(nameof(CreateEventCommand), result.Error);

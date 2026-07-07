@@ -1,6 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
+    <PackageReference Include="MassTransit" Version="9.1.2" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\..\Common\EventFlow.Common.Presentation\EventFlow.Common.Presentation.csproj" />
+    <ProjectReference Include="..\..\Ticketing\EventFlow.Modules.Ticketing.IntegrationEvents\EventFlow.Modules.Ticketing.IntegrationEvents.csproj" />
     <ProjectReference Include="..\EventFlow.Modules.Events.Application\EventFlow.Modules.Events.Application.csproj" />
   </ItemGroup>
 
