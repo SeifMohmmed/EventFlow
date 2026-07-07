@@ -12,6 +12,8 @@ using EventFlow.Modules.Events.Infrastructure.Events;
 using EventFlow.Modules.Events.Infrastructure.Inbox;
 using EventFlow.Modules.Events.Infrastructure.Outbox;
 using EventFlow.Modules.Events.Infrastructure.TicketTypes;
+using EventFlow.Modules.Events.Presentation.Events.CancelEventSaga;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
@@ -42,6 +44,13 @@ public static class EventsModule
         return services;
     }
 
+    // Registers the Cancel Event saga and configures Redis as its persistence store.
+    public static Action<IRegistrationConfigurator> ConfigureConsumers(string redisConnectionString)
+    {
+        return registrationConfigurator => registrationConfigurator
+            .AddSagaStateMachine<CancelEventSaga, CancelEventState>()
+            .RedisRepository(redisConnectionString);
+    }
     /// <summary>
     /// Registers the infrastructure services for the Events module.
     /// </summary>
