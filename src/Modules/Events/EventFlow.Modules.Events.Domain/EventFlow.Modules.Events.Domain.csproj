@@ -2,4 +2,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Common\EventFlow.Common.Domain\EventFlow.Common.Domain.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Events\CancelEvent\" />
+  </ItemGroup>
 </Project>
