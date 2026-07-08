@@ -33,6 +33,7 @@
   </Folder>
   <Folder Name="/src/Modules/Events/test/">
     <Project Path="src/Modules/Events/test/EventFlow.Modules.Events.ArchitectureTests/EventFlow.Modules.Events.ArchitectureTests.csproj" Id="610afea1-0bbc-4abf-95c5-d034787247e3" />
+    <Project Path="src/Modules/Events/test/EventFlow.Modules.Events.UnitTests/EventFlow.Modules.Events.UnitTests.csproj" Id="79cda7d3-0a02-4965-863c-1ad262720513" />
   </Folder>
   <Folder Name="/src/Modules/Ticketing/">
     <Project Path="src/Modules/Ticketing/EventFlow.Modules.Ticketing.Application/EventFlow.Modules.Ticketing.Application.csproj" Id="1942fcf3-52e9-4ee4-8cdc-281555a8659e" />
