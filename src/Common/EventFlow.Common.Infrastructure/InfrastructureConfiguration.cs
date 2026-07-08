@@ -55,7 +55,13 @@ public static class InfrastructureConfiguration
         services.TryAddSingleton<InsertOutboxMessagesInterceptor>();
 
         // Register Quartz services.
-        services.AddQuartz();
+        services.AddQuartz(configurator =>
+        {
+            // Generate unique Quartz scheduler IDs for test isolation
+            var scheduler = Guid.CreateVersion7();
+            configurator.SchedulerId = $"default-id-{scheduler}";
+            configurator.SchedulerName = $"default-name-{scheduler}";
+        });
 
         // Run Quartz as a hosted background service.
         services.AddQuartzHostedService(options =>

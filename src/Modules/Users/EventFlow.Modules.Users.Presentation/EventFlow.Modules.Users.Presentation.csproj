@@ -4,5 +4,8 @@
     <ProjectReference Include="..\..\..\Common\EventFlow.Common.Presentation\EventFlow.Common.Presentation.csproj" />
     <ProjectReference Include="..\EventFlow.Modules.Users.Application\EventFlow.Modules.Users.Application.csproj" />
   </ItemGroup>
-
+	
+	<ItemGroup>
+		<InternalsVisibleTo Include="EventFlow.Modules.Users.IntegrationTests" />
+	</ItemGroup>
 </Project>
