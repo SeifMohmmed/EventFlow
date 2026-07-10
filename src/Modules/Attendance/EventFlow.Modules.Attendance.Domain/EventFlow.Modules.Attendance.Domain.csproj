@@ -2,4 +2,9 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Common\EventFlow.Common.Domain\EventFlow.Common.Domain.csproj" />
   </ItemGroup>
+
+	<ItemGroup>
+		<InternalsVisibleTo Include="EventFlow.Modules.Attendance.UnitTests" />
+		<InternalsVisibleTo Include="EventFlow.UnitTests" />
+	</ItemGroup>
 </Project>

@@ -7,7 +7,7 @@ using MediatR;
 
 namespace EventFlow.Modules.Ticketing.Presentation.TicketTypes;
 
-public sealed class TicketTypePriceChangedIntegrationEventHandler(ISender sender)
+internal sealed class TicketTypePriceChangedIntegrationEventHandler(ISender sender)
     : IntegrationEventHandler<TicketTypePriceChangedIntegrationEvent>
 {
     public override async Task Handle(
