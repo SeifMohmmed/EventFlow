@@ -7,7 +7,7 @@ using MediatR;
 
 namespace EventFlow.Modules.Ticketing.Presentation.Customers;
 
-public sealed class UserProfileUpdatedIntegrationEventHandler(ISender sender)
+internal sealed class UserProfileUpdatedIntegrationEventHandler(ISender sender)
     : IntegrationEventHandler<UserProfileUpdatedIntegrationEvent>
 {
     public override async Task Handle(

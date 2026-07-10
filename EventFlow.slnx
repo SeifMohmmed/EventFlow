@@ -23,6 +23,8 @@
   </Folder>
   <Folder Name="/src/Modules/Attendance/test/">
     <Project Path="src/Modules/Attendance/test/EventFlow.Modules.Attendance.ArchitectureTests/EventFlow.Modules.Attendance.ArchitectureTests.csproj" Id="d9f19305-fa19-4c48-bf94-bf8f27d8ebdb" />
+    <Project Path="src/Modules/Attendance/test/EventFlow.Modules.Attendance.IntegrationTests/EventFlow.Modules.Attendance.IntegrationTests.csproj" Id="f8c9675d-301d-49ca-b9e7-ad9b5088292f" />
+    <Project Path="src/Modules/Attendance/test/EventFlow.Modules.Attendance.UnitTests/EventFlow.Modules.Attendance.UnitTests.csproj" Id="6608c082-118f-4132-acc5-22803de5cd6e" />
   </Folder>
   <Folder Name="/src/Modules/Events/">
     <Project Path="src/Modules/Events/EventFlow.Modules.Events.Application/EventFlow.Modules.Events.Application.csproj" Id="100a16f8-1156-492a-a49f-6f1c4b3c16db" />
@@ -33,6 +35,7 @@
   </Folder>
   <Folder Name="/src/Modules/Events/test/">
     <Project Path="src/Modules/Events/test/EventFlow.Modules.Events.ArchitectureTests/EventFlow.Modules.Events.ArchitectureTests.csproj" Id="610afea1-0bbc-4abf-95c5-d034787247e3" />
+    <Project Path="src/Modules/Events/test/EventFlow.Modules.Events.IntegrationTests/EventFlow.Modules.Events.IntegrationTests.csproj" Id="84fc4153-2807-404c-aa3b-a6f8b6e6df0f" />
     <Project Path="src/Modules/Events/test/EventFlow.Modules.Events.UnitTests/EventFlow.Modules.Events.UnitTests.csproj" Id="79cda7d3-0a02-4965-863c-1ad262720513" />
   </Folder>
   <Folder Name="/src/Modules/Ticketing/">
@@ -44,6 +47,8 @@
   </Folder>
   <Folder Name="/src/Modules/Ticketing/test/">
     <Project Path="src/Modules/Ticketing/test/EventFlow.Modules.Ticketing.ArchitectureTests/EventFlow.Modules.Ticketing.ArchitectureTests.csproj" Id="f03a9684-8ff3-4de6-852c-5d00c0e014a2" />
+    <Project Path="src/Modules/Ticketing/test/EventFlow.Modules.Ticketing.IntegrationTests/EventFlow.Modules.Ticketing.IntegrationTests.csproj" Id="6a2b31d1-2db1-40f7-8259-153a8784c497" />
+    <Project Path="src/Modules/Ticketing/test/EventFlow.Modules.Ticketing.UnitTests/EventFlow.Modules.Ticketing.UnitTests.csproj" Id="0e5b8e70-be7c-4450-acd7-d63d8d37b097" />
   </Folder>
   <Folder Name="/src/Modules/Users/">
     <Project Path="src/Modules/Users/EventFlow.Modules.Users.Application/EventFlow.Modules.Users.Application.csproj" Id="afdb3d36-37e5-4f05-ab52-774341a94753" />
@@ -55,6 +60,7 @@
   <Folder Name="/src/Modules/Users/test/">
     <Project Path="src/Modules/Users/test/EventFlow.Modules.Users.ArchitectureTests/EventFlow.Modules.Users.ArchitectureTests.csproj" Id="ad36899a-c430-4da7-8f36-7411630f99af" />
     <Project Path="src/Modules/Users/test/EventFlow.Modules.Users.IntegrationTests/EventFlow.Modules.Users.IntegrationTests.csproj" Id="006b37b3-84be-4bde-bf8d-5afff7858cd3" />
+    <Project Path="src/Modules/Users/test/EventFlow.Modules.Users.UnitTests/EventFlow.Modules.Users.UnitTests.csproj" Id="d8fc2c3d-804b-41ff-8988-f6b6781ec6ef" />
   </Folder>
   <Folder Name="/test/">
     <Project Path="test/EventFlow.ArchitectureTests/EventFlow.ArchitectureTests.csproj" Id="5594e044-2424-4ea5-af16-7b8d26619d0e" />
