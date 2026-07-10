@@ -12,6 +12,8 @@ using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Npgsql;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 using Quartz;
 using StackExchange.Redis;
 
@@ -29,6 +31,7 @@ public static class InfrastructureConfiguration
     /// </summary>
     public static IServiceCollection AddInfrastructure(
         this IServiceCollection services,
+        string serviceName,
         Action<IRegistrationConfigurator>[] modelConfigureConsumers,
         string databaseConnectionString,
         string redisConnectionString)
@@ -120,6 +123,29 @@ public static class InfrastructureConfiguration
                 configure.ConfigureEndpoints(context);
             });
         });
+
+        // Configure OpenTelemetry.
+        services
+            .AddOpenTelemetry()
+            // Configure the service information included in telemetry.
+            .ConfigureResource(resource => resource.AddService(serviceName))
+            .WithTracing(tracing =>
+            {
+                tracing
+                    // Capture incoming ASP.NET Core requests.
+                    .AddAspNetCoreInstrumentation()
+                    // Capture outgoing HTTP requests.
+                    .AddHttpClientInstrumentation()
+                    // Capture Entity Framework Core database operations.
+                    .AddEntityFrameworkCoreInstrumentation()
+                    // Capture PostgreSQL database commands.
+                    .AddNpgsql()
+                    // Capture MassTransit messaging activities.
+                    .AddSource(MassTransit.Logging.DiagnosticHeaders.DefaultListenerName);
+
+                // Export traces using the OTLP protocol.
+                tracing.AddOtlpExporter();
+            });
 
         return services;
     }

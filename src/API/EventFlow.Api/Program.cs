@@ -1,6 +1,7 @@
 using System.Reflection;
 using EventFlow.Api.Extensions;
 using EventFlow.Api.Middleware;
+using EventFlow.Api.OpenTelemetry;
 using EventFlow.Common.Application;
 using EventFlow.Common.Infrastructure;
 using EventFlow.Common.Presentation.Endpoints;
@@ -40,6 +41,7 @@ string databaseConnectionString = builder.Configuration.GetConnectionString("Dat
 string redisConnectionString = builder.Configuration.GetConnectionString("Cache")!;
 
 builder.Services.AddInfrastructure(
+    DiagonosticsConfig.ServiceName,
     [
          EventsModule.ConfigureConsumers(redisConnectionString),
          TicketingModule.ConfigureConsumers,
@@ -79,6 +81,8 @@ app.MapHealthChecks("health", new HealthCheckOptions
 {
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 });
+
+app.UseLogContextTraceLogging();
 
 app.UseSerilogRequestLogging();
 

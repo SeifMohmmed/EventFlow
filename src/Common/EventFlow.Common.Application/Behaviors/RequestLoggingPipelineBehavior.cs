@@ -1,4 +1,5 @@
-﻿using EventFlow.Common.Domain;
+﻿using System.Diagnostics;
+using EventFlow.Common.Domain;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Serilog.Context;
@@ -25,6 +26,10 @@ internal sealed class RequestLoggingPipelineBehavior<TRequest, TResponse>(
         // Determine the module and request names for structured logging.
         string moduleName = GetModuleName(typeof(TRequest).FullName!);
         string requestName = typeof(TRequest).Name;
+
+        // Add request metadata to the current distributed trace.
+        Activity.Current?.SetTag("request.module", moduleName);
+        Activity.Current?.SetTag("request.name", requestName);
 
         // Add the module name as a Serilog property so it appears
         // in every log entry generated during this request.
