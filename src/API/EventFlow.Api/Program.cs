@@ -4,6 +4,8 @@ using EventFlow.Api.Middleware;
 using EventFlow.Api.OpenTelemetry;
 using EventFlow.Common.Application;
 using EventFlow.Common.Infrastructure;
+using EventFlow.Common.Infrastructure.Configuration;
+using EventFlow.Common.Infrastructure.EventBus;
 using EventFlow.Common.Presentation.Endpoints;
 using EventFlow.Modules.Attendance.Infrastructure;
 using EventFlow.Modules.Events.Infrastructure;
@@ -15,19 +17,13 @@ using Serilog;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-builder.Host.UseSerilog((context, configuration) =>
-{
-    configuration.ReadFrom.Configuration(context.Configuration);
-});
+builder.Host.UseSerilog((context, loggerConfig) => loggerConfig.ReadFrom.Configuration(context.Configuration));
 
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
-    options.CustomSchemaIds(type => type.FullName?.Replace("+", "."));
-});
+builder.Services.AddSwaggerDocumentation();
 
 Assembly[] moduleApplicationAssemblies = [
     EventFlow.Modules.Events.Application.AssemblyReference.Assembly,
@@ -39,6 +35,7 @@ builder.Services.AddApplication(moduleApplicationAssemblies);
 
 string databaseConnectionString = builder.Configuration.GetConnectionString("Database")!;
 string redisConnectionString = builder.Configuration.GetConnectionString("Cache")!;
+var rabbitMqSettings = new RabbitMqSettings(builder.Configuration.GetConnectionStringOrThrow("Queue"));
 
 builder.Services.AddInfrastructure(
     DiagonosticsConfig.ServiceName,
@@ -47,6 +44,7 @@ builder.Services.AddInfrastructure(
          TicketingModule.ConfigureConsumers,
          AttendanceModule.ConfigureConsumers
     ],
+    rabbitMqSettings,
     databaseConnectionString,
     redisConnectionString);
 
@@ -55,6 +53,7 @@ Uri keyCloakHealthUrl = builder.Configuration.GetKeyCloakHealthUrl();
 builder.Services.AddHealthChecks()
     .AddNpgSql(databaseConnectionString)
     .AddRedis(redisConnectionString)
+    .AddRabbitMQ(rabbitConnectionString: rabbitMqSettings.Host)
     .AddKeyCloak(keyCloakHealthUrl);
 
 builder.Configuration.AddModuleConfiguration(["users", "events", "ticketing", "attendance"]);

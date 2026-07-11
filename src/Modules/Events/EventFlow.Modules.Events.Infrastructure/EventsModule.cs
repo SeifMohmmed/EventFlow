@@ -45,10 +45,14 @@ public static class EventsModule
     }
 
     // Registers the Cancel Event saga and configures Redis as its persistence store.
-    public static Action<IRegistrationConfigurator> ConfigureConsumers(string redisConnectionString)
+    public static Action<IRegistrationConfigurator, string> ConfigureConsumers(string redisConnectionString)
     {
-        return registrationConfigurator => registrationConfigurator
+        return (registration, instanceId) => registration
+            // Register the saga state machine responsible for coordinating event cancellation.
             .AddSagaStateMachine<CancelEventSaga, CancelEventState>()
+            // Ensure each service instance gets its own endpoint.
+            .Endpoint(c => c.InstanceId = instanceId)
+            // Persist saga state in Redis.
             .RedisRepository(redisConnectionString);
     }
     /// <summary>

@@ -52,16 +52,30 @@ public static class TicketingModule
     }
 
     /// <summary>
-    /// Registers the Ticketing module's message consumers.
+    /// Registers the Ticketing module's integration event consumers.
     /// </summary>
     public static void ConfigureConsumers(
-        IRegistrationConfigurator registrationConfigurator)
+        IRegistrationConfigurator registrationConfigurator, string instanceId)
     {
-        registrationConfigurator.AddConsumer<IntegrationEventConsumer<UserRegisteredIntegrationEvent>>();
-        registrationConfigurator.AddConsumer<IntegrationEventConsumer<UserProfileUpdatedIntegrationEvent>>();
-        registrationConfigurator.AddConsumer<IntegrationEventConsumer<EventPublishedIntegrationEvent>>();
-        registrationConfigurator.AddConsumer<IntegrationEventConsumer<TicketTypePriceChangedIntegrationEvent>>();
-        registrationConfigurator.AddConsumer<IntegrationEventConsumer<EventCancellationStartedIntegrationEvent>>();
+        // Handles user registration events.
+        registrationConfigurator.AddConsumer<IntegrationEventConsumer<UserRegisteredIntegrationEvent>>()
+            .Endpoint(c => c.InstanceId = instanceId);
+
+        // Handles user profile update events.
+        registrationConfigurator.AddConsumer<IntegrationEventConsumer<UserProfileUpdatedIntegrationEvent>>()
+            .Endpoint(c => c.InstanceId = instanceId);
+
+        // Handles event publication events.
+        registrationConfigurator.AddConsumer<IntegrationEventConsumer<EventPublishedIntegrationEvent>>()
+            .Endpoint(c => c.InstanceId = instanceId);
+
+        // Handles ticket type price change events.
+        registrationConfigurator.AddConsumer<IntegrationEventConsumer<TicketTypePriceChangedIntegrationEvent>>()
+            .Endpoint(c => c.InstanceId = instanceId);
+
+        // Handles the start of the event cancellation workflow.
+        registrationConfigurator.AddConsumer<IntegrationEventConsumer<EventCancellationStartedIntegrationEvent>>()
+            .Endpoint(c => c.InstanceId = instanceId);
     }
 
     /// <summary>

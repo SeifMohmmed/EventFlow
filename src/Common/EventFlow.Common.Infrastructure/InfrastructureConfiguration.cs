@@ -7,6 +7,7 @@ using EventFlow.Common.Infrastructure.Authorization;
 using EventFlow.Common.Infrastructure.Caching;
 using EventFlow.Common.Infrastructure.Clock;
 using EventFlow.Common.Infrastructure.Data;
+using EventFlow.Common.Infrastructure.EventBus;
 using EventFlow.Common.Infrastructure.Outbox;
 using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,7 +33,8 @@ public static class InfrastructureConfiguration
     public static IServiceCollection AddInfrastructure(
         this IServiceCollection services,
         string serviceName,
-        Action<IRegistrationConfigurator>[] modelConfigureConsumers,
+        Action<IRegistrationConfigurator, string>[] modelConfigureConsumers,
+        RabbitMqSettings rabbitMqSettings,
         string databaseConnectionString,
         string redisConnectionString)
     {
@@ -107,18 +109,29 @@ public static class InfrastructureConfiguration
         // Configure MassTransit and register message consumers.
         services.AddMassTransit(cfg =>
         {
+            // Generate a unique instance identifier for this service.
+            // Example: EventFlow.Api -> eventflow-api
+            string instanceId = serviceName.ToLowerInvariant().Replace('.', '-');
+
             // Register consumers from each module.
-            foreach (Action<IRegistrationConfigurator> configureConsumer in modelConfigureConsumers)
+            foreach (Action<IRegistrationConfigurator, string> configureConsumer in modelConfigureConsumers)
             {
-                configureConsumer(cfg);
+                configureConsumer(cfg, instanceId);
             }
 
             // Use kebab-case naming for generated endpoints.
             cfg.SetKebabCaseEndpointNameFormatter();
 
-            // Configure the in-memory transport.
-            cfg.UsingInMemory((context, configure) =>
+            // Configure the RabbitMQ transport.
+            cfg.UsingRabbitMq((context, configure) =>
             {
+                // Configure the RabbitMQ host and credentials.
+                configure.Host(new Uri(rabbitMqSettings.Host), h =>
+                {
+                    h.Username(rabbitMqSettings.UserName);
+                    h.Password(rabbitMqSettings.Password);
+                });
+
                 // Automatically configure endpoints for all registered consumers.
                 configure.ConfigureEndpoints(context);
             });
