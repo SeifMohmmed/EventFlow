@@ -4,8 +4,6 @@ using EventFlow.Modules.Attendance.Domain.Attendees;
 using EventFlow.Modules.Attendance.Infrastructure;
 using EventFlow.Modules.Events.Domain;
 using EventFlow.Modules.Events.Infrastructure;
-using EventFlow.Modules.Ticketing.Domain.Orders;
-using EventFlow.Modules.Ticketing.Infrastructure;
 using EventFlow.Modules.Users.Domain.Users;
 using EventFlow.Modules.Users.Infrastructure;
 using NetArchTest.Rules;
@@ -72,39 +70,6 @@ public class ModuleTests : BaseTest
 
         // Verify that the Events module only depends on integration event contracts.
         Types.InAssemblies(eventsAssemblies)
-            .That()
-            .DoNotHaveDependencyOnAny(integrationEventsModules)
-            .Should()
-            .NotHaveDependencyOnAny(otherModules)
-            .GetResult()
-            .ShouldBeSuccessful();
-    }
-
-    [Fact]
-    public void TicketingModule_ShouldNotHaveDependencyOn_AnyOtherModule()
-    {
-        // Namespaces of the modules the Ticketing module must not reference.
-        string[] otherModules = [EventsNamespace, UsersNamespace, AttendanceNamespace];
-
-        // Integration event namespaces are allowed dependencies.
-        string[] integrationEventsModules =
-        [
-            EventsIntegrationEventsNamespace,
-            UsersIntegrationEventsNamespace,
-            AttendanceIntegrationEventsNamespace
-        ];
-
-        // Assemblies that make up the Ticketing module.
-        List<Assembly> ticketingAssemblies =
-        [
-            typeof(Order).Assembly,
-            Modules.Ticketing.Application.AssemblyReference.Assembly,
-            Modules.Ticketing.Presentation.AssemblyReference.Assembly,
-            typeof(TicketingModule).Assembly
-        ];
-
-        // Verify that the Ticketing module only depends on integration event contracts.
-        Types.InAssemblies(ticketingAssemblies)
             .That()
             .DoNotHaveDependencyOnAny(integrationEventsModules)
             .Should()

@@ -4,7 +4,8 @@
       "commandName": "DockerCompose",
       "commandVersion": "1.0",
       "serviceActions": {
-        "eventflow.api": "StartDebugging"
+        "eventflow.api": "StartDebugging",
+        "eventflow.ticketing.api": "StartDebugging"
       }
     }
   }

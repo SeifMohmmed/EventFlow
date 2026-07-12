@@ -1,19 +1,16 @@
 using System.Reflection;
-using EventFlow.Api.Extensions;
-using EventFlow.Api.Middleware;
-using EventFlow.Api.OpenTelemetry;
 using EventFlow.Common.Application;
 using EventFlow.Common.Infrastructure;
 using EventFlow.Common.Infrastructure.Configuration;
 using EventFlow.Common.Infrastructure.EventBus;
 using EventFlow.Common.Presentation.Endpoints;
-using EventFlow.Modules.Attendance.Infrastructure;
-using EventFlow.Modules.Events.Infrastructure;
-using EventFlow.Modules.Users.Infrastructure;
+using EventFlow.Modules.Ticketing.Infrastructure;
+using EventFlow.Ticketing.Api.Extensions;
+using EventFlow.Ticketing.Api.Middleware;
+using EventFlow.Ticketing.Api.OpenTelemetry;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Serilog;
-
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.Host.UseSerilog((context, loggerConfig) => loggerConfig.ReadFrom.Configuration(context.Configuration));
@@ -24,10 +21,7 @@ builder.Services.AddProblemDetails();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerDocumentation();
 
-Assembly[] moduleApplicationAssemblies = [
-    EventFlow.Modules.Events.Application.AssemblyReference.Assembly,
-    EventFlow.Modules.Users.Application.AssemblyReference.Assembly,
-    EventFlow.Modules.Attendance.Application.AssemblyReference.Assembly];
+Assembly[] moduleApplicationAssemblies = [EventFlow.Modules.Ticketing.Application.AssemblyReference.Assembly];
 
 builder.Services.AddApplication(moduleApplicationAssemblies);
 
@@ -38,9 +32,7 @@ var rabbitMqSettings = new RabbitMqSettings(builder.Configuration.GetConnectionS
 builder.Services.AddInfrastructure(
     DiagonosticsConfig.ServiceName,
     [
-         EventsModule.ConfigureConsumers(redisConnectionString),
-         AttendanceModule.ConfigureConsumers,
-         UsersModule.ConfigureConsumers
+         TicketingModule.ConfigureConsumers,
     ],
     rabbitMqSettings,
     databaseConnectionString,
@@ -54,13 +46,9 @@ builder.Services.AddHealthChecks()
     .AddRabbitMQ(rabbitConnectionString: rabbitMqSettings.Host)
     .AddKeyCloak(keyCloakHealthUrl);
 
-builder.Configuration.AddModuleConfiguration(["users", "events", "attendance"]);
+builder.Configuration.AddModuleConfiguration(["ticketing"]);
 
-builder.Services.AddEventModule(builder.Configuration);
-
-builder.Services.AddUsersModule(builder.Configuration);
-
-builder.Services.AddAttendanceModule(builder.Configuration);
+builder.Services.AddTicketingModule(builder.Configuration);
 
 WebApplication app = builder.Build();
 

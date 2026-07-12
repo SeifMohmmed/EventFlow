@@ -12,6 +12,8 @@ using EventFlow.Modules.Users.Infrastructure.Identity;
 using EventFlow.Modules.Users.Infrastructure.Inbox;
 using EventFlow.Modules.Users.Infrastructure.Outbox;
 using EventFlow.Modules.Users.Infrastructure.Users;
+using EventFlow.Modules.Users.Presentation.Users;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
@@ -43,7 +45,17 @@ public static class UsersModule
 
         return services;
     }
-
+    /// <summary>
+    /// Registers the Users module request consumers.
+    /// </summary>
+    public static void ConfigureConsumers(
+        IRegistrationConfigurator registrationConfigurator,
+        string instanceId)
+    {
+        // Handles requests for retrieving user permissions.
+        registrationConfigurator.AddConsumer<GetUserPermissionsRequestConsumer>()
+            .Endpoint(c => c.InstanceId = instanceId);
+    }
     /// <summary>
     /// Registers the infrastructure services for the Users module.
     /// </summary>

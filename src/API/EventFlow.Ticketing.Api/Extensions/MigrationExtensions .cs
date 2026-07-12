@@ -1,9 +1,7 @@
-﻿using EventFlow.Modules.Attendance.Infrastructure.Database;
-using EventFlow.Modules.Events.Infrastructure.Database;
-using EventFlow.Modules.Users.Infrastructure.Database;
+﻿using EventFlow.Modules.Ticketing.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 
-namespace EventFlow.Api.Extensions;
+namespace EventFlow.Ticketing.Api.Extensions;
 
 /// <summary>
 /// Provides extension methods for applying
@@ -18,9 +16,7 @@ internal static class MigrationExtensions
     {
         using IServiceScope scope = app.ApplicationServices.CreateScope();
 
-        ApplyMigration<EventsDbContext>(scope);
-        ApplyMigration<UsersDbContext>(scope);
-        ApplyMigration<AttendanceDbContext>(scope);
+        ApplyMigration<TicketingDbContext>(scope);
     }
 
     /// <summary>

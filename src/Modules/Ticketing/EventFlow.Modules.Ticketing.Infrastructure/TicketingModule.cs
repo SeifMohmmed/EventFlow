@@ -1,4 +1,5 @@
-﻿using EventFlow.Common.Application.EventBus;
+﻿using EventFlow.Common.Application.Authorization;
+using EventFlow.Common.Application.EventBus;
 using EventFlow.Common.Application.Messaging;
 using EventFlow.Common.Infrastructure.Outbox;
 using EventFlow.Common.Presentation.Endpoints;
@@ -13,6 +14,7 @@ using EventFlow.Modules.Ticketing.Domain.Orders;
 using EventFlow.Modules.Ticketing.Domain.Payments;
 using EventFlow.Modules.Ticketing.Domain.Tickets;
 using EventFlow.Modules.Ticketing.Infrastructure.Authentication;
+using EventFlow.Modules.Ticketing.Infrastructure.Authorization;
 using EventFlow.Modules.Ticketing.Infrastructure.Customers;
 using EventFlow.Modules.Ticketing.Infrastructure.Database;
 using EventFlow.Modules.Ticketing.Infrastructure.Events;
@@ -130,6 +132,8 @@ public static class TicketingModule
         services.Configure<InboxOptions>(configuration.GetSection("Ticketing:Inbox"));
 
         services.ConfigureOptions<ConfigureProcessInboxJob>();
+
+        services.AddScoped<IPermissionService, PermissionService>();
     }
 
     private static void AddDomainEventHandlers(this IServiceCollection services)
