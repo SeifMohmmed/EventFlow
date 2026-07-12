@@ -6,6 +6,7 @@
   <Folder Name="/src/" />
   <Folder Name="/src/API/">
     <Project Path="src/API/EventFlow.Api/EventFlow.Api.csproj" />
+    <Project Path="src/API/EventFlow.Gateway/EventFlow.Gateway.csproj" Id="e77d68c4-5618-48da-b4a5-ca6bc67301e1" />
   </Folder>
   <Folder Name="/src/Common/">
     <Project Path="src/Common/EventFlow.Common.Application/EventFlow.Common.Application.csproj" Id="174e30d9-e489-491b-a528-4343fdaa761e" />
