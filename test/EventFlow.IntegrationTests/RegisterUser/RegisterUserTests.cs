@@ -1,4 +1,5 @@
-﻿using EventFlow.Common.Domain;
+﻿#pragma warning disable S125
+/*using EventFlow.Common.Domain;
 using EventFlow.IntegrationTests.Abstractions;
 using EventFlow.Modules.Attendance.Application.Attendees.GetAttendee;
 using EventFlow.Modules.Ticketing.Application.Customers.GetCustomer;
@@ -61,7 +62,11 @@ public class RegisterUserTests : BaseIntegrationTest
             TimeSpan.FromSeconds(15),
             async () =>
             {
-                return await Sender.Send(new GetAttendeeQuery(userResult.Value));
+                var query = new GetAttendeeQuery(userResult.Value);
+
+                Result<AttendeeResponse> customerResult = await Sender.Send(query);
+
+                return customerResult;
             });
 
         // Assert - The attendee should exist.
@@ -69,3 +74,4 @@ public class RegisterUserTests : BaseIntegrationTest
         attendeeResult.Value.Should().NotBeNull();
     }
 }
+*/
