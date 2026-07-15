@@ -34,6 +34,7 @@ builder.Services.AddApplication(moduleApplicationAssemblies);
 string databaseConnectionString = builder.Configuration.GetConnectionString("Database")!;
 string redisConnectionString = builder.Configuration.GetConnectionString("Cache")!;
 var rabbitMqSettings = new RabbitMqSettings(builder.Configuration.GetConnectionStringOrThrow("Queue"));
+string mongoConnectionString = builder.Configuration.GetConnectionString("Mongo")!;
 
 builder.Services.AddInfrastructure(
     DiagonosticsConfig.ServiceName,
@@ -46,12 +47,15 @@ builder.Services.AddInfrastructure(
     databaseConnectionString,
     redisConnectionString);
 
+builder.Services.AddMongoInfrastructure(mongoConnectionString);
+
 Uri keyCloakHealthUrl = builder.Configuration.GetKeyCloakHealthUrl();
 
 builder.Services.AddHealthChecks()
     .AddNpgSql(databaseConnectionString)
     .AddRedis(redisConnectionString)
     .AddRabbitMQ(rabbitConnectionString: rabbitMqSettings.Host)
+    .AddMongoDb()
     .AddKeyCloak(keyCloakHealthUrl);
 
 builder.Configuration.AddModuleConfiguration(["users", "events", "attendance"]);
