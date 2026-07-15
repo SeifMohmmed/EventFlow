@@ -4,6 +4,7 @@ using EventFlow.Common.Infrastructure.Outbox;
 using EventFlow.Common.Presentation.Endpoints;
 using EventFlow.Modules.Attendance.Application.Abstractions.Authentication;
 using EventFlow.Modules.Attendance.Application.Abstractions.Data;
+using EventFlow.Modules.Attendance.Application.EventStatistics;
 using EventFlow.Modules.Attendance.Domain.Attendees;
 using EventFlow.Modules.Attendance.Domain.Events;
 using EventFlow.Modules.Attendance.Domain.Tickets;
@@ -83,6 +84,7 @@ public static class AttendanceModule
         services.AddScoped<IAttendeeRepository, AttendeeRepository>();
         services.AddScoped<IEventRepository, EventRepository>();
         services.AddScoped<ITicketRepository, TicketRepository>();
+        services.AddScoped<IEventStatisticsRepository, EventStatisticsRepository>();
 
         services.AddScoped<IAttendanceContext, AttendanceContext>();
 

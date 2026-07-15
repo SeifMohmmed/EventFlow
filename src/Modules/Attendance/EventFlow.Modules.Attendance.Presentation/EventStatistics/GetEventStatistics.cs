@@ -17,7 +17,7 @@ internal sealed class GetEventStatistics : IEndpoint
         app.MapGet("event-statistics/{id}", async (Guid id, ISender sender) =>
         {
             // Execute the query through MediatR.
-            Result<EventStatisticsResponse> result =
+            Result<Application.EventStatistics.EventStatistics> result =
                 await sender.Send(new GetEventStatisticsQuery(id));
 
             // Return either the statistics or a standardized error response.

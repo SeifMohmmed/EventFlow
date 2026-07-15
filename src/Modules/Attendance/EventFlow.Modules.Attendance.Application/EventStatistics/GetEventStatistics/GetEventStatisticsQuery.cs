@@ -4,4 +4,4 @@ namespace EventFlow.Modules.Attendance.Application.EventStatistics.GetEventStati
 
 // CQRS query used to retrieve statistics for a specific event.
 public sealed record GetEventStatisticsQuery(Guid EventId)
-    : IQuery<EventStatisticsResponse>;
+    : IQuery<EventStatistics>;

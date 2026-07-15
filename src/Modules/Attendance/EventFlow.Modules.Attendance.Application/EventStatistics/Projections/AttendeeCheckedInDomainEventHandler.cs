@@ -6,30 +6,41 @@ using EventFlow.Modules.Attendance.Domain.Attendees;
 
 namespace EventFlow.Modules.Attendance.Application.EventStatistics.Projections;
 
-// Updates the projection whenever an attendee successfully checks in.
-internal sealed class AttendeeCheckedInDomainEventHandler(IDbConnectionFactory dbConnectionFactory)
+// Updates the event statistics projection when an attendee successfully checks in.
+internal sealed class AttendeeCheckedInDomainEventHandler(
+    IDbConnectionFactory dbConnectionFactory,
+    IEventStatisticsRepository eventStatisticsRepository)
     : DomainEventHandler<AttendeeCheckedInDomainEvent>
 {
     public override async Task Handle(
         AttendeeCheckedInDomainEvent domainEvent,
         CancellationToken cancellationToken = default)
     {
+        // Open a database connection to query the latest attendance information.
         await using DbConnection connection = await dbConnectionFactory.OpenConnectionAsync();
 
-        // Recalculate the number of checked-in attendees.
-        // This guarantees consistency even if events are processed more than once.
+        // Count the number of tickets that have been used for the event.
+        // Recalculating the value keeps the projection consistent even if
+        // the event is processed more than once.
         const string sql =
             """
-            UPDATE attendance.event_statistics es
-            SET attendees_checked_in = (
-                SELECT COUNT(*)
-                FROM attendance.tickets t
-                WHERE
-                    t.event_id = es.event_id AND
-                    t.used_at_utc IS NOT NULL)
-            WHERE es.event_id = @EventId
+            SELECT COUNT(*)
+            FROM attendance.tickets t
+            WHERE
+                t.event_id = es.event_id AND
+                t.used_at_utc IS NOT NULL)
             """;
 
-        await connection.ExecuteAsync(sql, domainEvent);
+        int attendeeCount = await connection.ExecuteAsync(sql, domainEvent);
+
+        // Load the current event statistics document.
+        EventStatistics eventStatistics =
+            await eventStatisticsRepository.GetAsync(domainEvent.EventId, cancellationToken);
+
+        // Update the checked-in attendee count.
+        eventStatistics.AttendeesCheckedIn = attendeeCount;
+
+        // Persist the updated projection.
+        await eventStatisticsRepository.ReplaceAsync(eventStatistics, cancellationToken);
     }
 }

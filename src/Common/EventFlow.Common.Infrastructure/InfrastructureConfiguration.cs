@@ -12,12 +12,13 @@ using EventFlow.Common.Infrastructure.Outbox;
 using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using MongoDB.Driver;
+using MongoDB.Driver.Core.Extensions.DiagnosticSources;
 using Npgsql;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using Quartz;
 using StackExchange.Redis;
-
 namespace EventFlow.Common.Infrastructure;
 
 /// <summary>
@@ -154,11 +155,35 @@ public static class InfrastructureConfiguration
                     // Capture PostgreSQL database commands.
                     .AddNpgsql()
                     // Capture MassTransit messaging activities.
-                    .AddSource(MassTransit.Logging.DiagnosticHeaders.DefaultListenerName);
+                    .AddSource(MassTransit.Logging.DiagnosticHeaders.DefaultListenerName)
+                    // Capture MongoDB driver activities.
+                    .AddSource("MongoDB.Driver.Core.Extensions.DiagnosticSources");
 
                 // Export traces using the OTLP protocol.
                 tracing.AddOtlpExporter();
             });
+
+        return services;
+    }
+    public static IServiceCollection AddMongoInfrastructure(
+       this IServiceCollection services,
+       string mongoConnectionString)
+    {
+        // Create MongoDB client settings from the connection string.
+        var settings = MongoClientSettings.FromConnectionString(mongoConnectionString);
+
+        // Enable OpenTelemetry diagnostics for MongoDB operations.
+        settings.ClusterConfigurator = c =>
+            c.Subscribe(new DiagnosticsActivityEventSubscriber(
+                new InstrumentationOptions
+                {
+                    // Include executed MongoDB commands in the generated activities.
+                    CaptureCommandText = true
+                }));
+
+        // Register a singleton MongoDB client.
+        services.AddSingleton<IMongoClient>(_ =>
+            new MongoClient(settings));
 
         return services;
     }
